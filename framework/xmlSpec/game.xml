@@ -1,0 +1,199 @@
+<?xml version = "1.0"?>
+<GameData>
+
+<HUD>
+  <red>0</red>
+  <green>0</green>
+  <blue>0</blue>
+  <alpha>200</alpha>
+  <height>200</height>
+  <width>400</width>
+  <title>HUD</title>
+  <line1>WASD to move</line1>
+  <line2>'/' (left slash) to roll</line2>
+  <line3>F1 to toggle HUD</line3>
+  <linespace>40</linespace>
+</HUD>
+
+<title>Landon Byrd's Game</title>
+<maxStringSize>50</maxStringSize>
+
+<frameCapOn>true</frameCapOn>
+<period>17</period>
+
+<maxFrames>300</maxFrames>
+<username>landonb</username>
+
+<view>
+  <width>1200</width>
+  <height>600</height>
+</view>
+
+<world>
+  <width>5000</width>
+  <height>1000</height>
+</world>
+
+<sky>
+  <file>assets/sky.png</file>
+  <factor>3</factor>
+  <transparency>false</transparency>
+</sky>
+
+<mountains>
+  <file>assets/mountains.png</file>
+  <factor>2</factor>
+  <transparency>true</transparency>
+</mountains>
+
+
+
+<ground>
+  <file>assets/ground.png</file>
+  <factor>1</factor>
+  <transparency>true</transparency>
+</ground>
+
+
+
+<font name="font">
+  <file>fonts/Pixel.ttf</file>
+  <size>24</size>
+  <red>255</red>
+  <green>255</green>
+  <blue>255</blue>
+  <alpha>255</alpha>
+
+</font>
+
+<playerCharacter>
+  <frames>6</frames>
+  <imageWidth>32</imageWidth>
+  <imageHeight>32</imageHeight>
+  <frameInterval>100</frameInterval>
+  <scale>2</scale>
+  <speedX>100</speedX>
+  <speedY>100</speedY>
+  <startLoc x="150" y="600"/>
+
+  <shadow>
+    <file>assets/Dark_Guy_Shadow.png</file>
+    <transparency>true</transparency>
+  </shadow>
+
+  <rollLeftAnim>
+    <file>assets/Dark_Guy_roll_left.png</file>
+    <frames>10</frames>
+    <imageWidth>32</imageWidth>
+    <imageHeight>32</imageHeight>
+    <frameInterval>100</frameInterval>
+    <speedX>200</speedX>
+    <speedY>200</speedY>
+    <transparency>true</transparency>
+  </rollLeftAnim>
+
+  <rollRightAnim>
+    <file>assets/Dark_Guy_roll_right.png</file>
+    <frames>10</frames>
+    <imageWidth>32</imageWidth>
+    <imageHeight>32</imageHeight>
+    <frameInterval>100</frameInterval>
+    <speedX>200</speedX>
+    <speedY>200</speedY>
+    <transparency>true</transparency>
+  </rollRightAnim>
+
+
+  <leftUpAnim>
+    <file>assets/Dark_Guy_left_up.png</file>
+    <frames>6</frames>
+    <imageWidth>32</imageWidth>
+    <imageHeight>32</imageHeight>
+    <frameInterval>100</frameInterval>
+    <speedX>200</speedX>
+    <speedY>200</speedY>
+    <transparency>true</transparency>
+  </leftUpAnim>
+  <leftDownAnim>
+    <file>assets/Dark_Guy_left_down.png</file>
+    <frames>6</frames>
+    <imageWidth>32</imageWidth>
+    <imageHeight>32</imageHeight>
+    <frameInterval>100</frameInterval>
+    <speedX>200</speedX>
+    <speedY>200</speedY>
+    <transparency>true</transparency>
+  </leftDownAnim>
+  <rightUpAnim>
+    <file>assets/Dark_Guy_right_up.png</file>
+    <frames>6</frames>
+    <imageWidth>32</imageWidth>
+    <imageHeight>32</imageHeight>
+    <frameInterval>100</frameInterval>
+    <speedX>200</speedX>
+    <speedY>200</speedY>
+    <transparency>true</transparency>
+  </rightUpAnim>
+  <rightDownAnim>
+    <file>assets/Dark_Guy_right_down.png</file>
+    <frames>6</frames>
+    <imageWidth>32</imageWidth>
+    <imageHeight>32</imageHeight>
+    <frameInterval>100</frameInterval>
+    <speedX>200</speedX>
+    <speedY>200</speedY>
+    <transparency>true</transparency>
+  </rightDownAnim>
+
+</playerCharacter>
+
+
+
+<Giants>
+  <file>assets/giants.png</file>
+  <startLoc x="150" y="200"/>
+  <frames>4</frames>
+  <imageWidth>250</imageWidth>
+  <imageHeight>400</imageHeight>
+  <frameInterval>300</frameInterval>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
+</Giants>
+
+<face>
+  <file>assets/face.png</file>
+  <startLoc x="0" y="100"/>
+  <speedX>100</speedX>
+  <speedY>100</speedY>
+  <transparency>true</transparency>
+  <safeDistance>300</safeDistance>
+</face>
+
+<SnowyCorridor>
+  <file>assets/Snowy_Corridor.png</file>
+  <border>
+    <file>assets/Snowy_Corridor_border.png</file>
+    <transparency>true</transparency>
+  </border>
+  <startLoc x="20" y="400"/>
+  <scale>3</scale>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
+</SnowyCorridor>
+
+<DarkLogCabin>
+  <file>assets/Dark_Log_Cabin.png</file>
+  <border>
+    <file>assets/Dark_Log_Cabin_border.png</file>
+    <transparency>true</transparency>
+  </border>
+  <startLoc x="800" y="400"/>
+  <scale>3</scale>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
+</DarkLogCabin>
+
+</GameData>
