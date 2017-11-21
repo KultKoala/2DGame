@@ -200,7 +200,7 @@ void Player::update(Uint32 ticks) {
 		float ey= currentRoom->getY()+currentRoom->getScaledHeight()/2;
 		Vector2f vec(ex-x,ey-y);
 		vec[0]=vec[0]/2;
-		vec =  vec.normalize()*-1 * 0.001* initialVelocity.magnitude()*static_cast<float>(ticks) *getVelocity().normalize();
+		vec =  vec.normalize()* 0.001* initialVelocity.magnitude()*static_cast<float>(ticks);
 		setPosition(getPosition()+vec);
 
 

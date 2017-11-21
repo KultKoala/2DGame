@@ -68,10 +68,10 @@
 
 <playerCharacter>
   <frames>6</frames>
-  <imageWidth>32</imageWidth>
-  <imageHeight>32</imageHeight>
+  <imageWidth>64</imageWidth>
+  <imageHeight>64</imageHeight>
   <frameInterval>100</frameInterval>
-  <scale>2</scale>
+  <scale>1</scale>
   <speedX>100</speedX>
   <speedY>100</speedY>
   <startLoc x="150" y="600"/>
@@ -83,9 +83,9 @@
 
   <rollLeftAnim>
     <file>assets/Dark_Guy_roll_left.png</file>
-    <frames>10</frames>
-    <imageWidth>32</imageWidth>
-    <imageHeight>32</imageHeight>
+    <frames>7</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
     <speedX>200</speedX>
     <speedY>200</speedY>
@@ -94,9 +94,9 @@
 
   <rollRightAnim>
     <file>assets/Dark_Guy_roll_right.png</file>
-    <frames>10</frames>
-    <imageWidth>32</imageWidth>
-    <imageHeight>32</imageHeight>
+    <frames>7</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
     <speedX>200</speedX>
     <speedY>200</speedY>
@@ -107,8 +107,8 @@
   <leftUpAnim>
     <file>assets/Dark_Guy_left_up.png</file>
     <frames>6</frames>
-    <imageWidth>32</imageWidth>
-    <imageHeight>32</imageHeight>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
     <speedX>200</speedX>
     <speedY>200</speedY>
@@ -117,8 +117,8 @@
   <leftDownAnim>
     <file>assets/Dark_Guy_left_down.png</file>
     <frames>6</frames>
-    <imageWidth>32</imageWidth>
-    <imageHeight>32</imageHeight>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
     <speedX>200</speedX>
     <speedY>200</speedY>
@@ -127,8 +127,8 @@
   <rightUpAnim>
     <file>assets/Dark_Guy_right_up.png</file>
     <frames>6</frames>
-    <imageWidth>32</imageWidth>
-    <imageHeight>32</imageHeight>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
     <speedX>200</speedX>
     <speedY>200</speedY>
@@ -137,8 +137,8 @@
   <rightDownAnim>
     <file>assets/Dark_Guy_right_down.png</file>
     <frames>6</frames>
-    <imageWidth>32</imageWidth>
-    <imageHeight>32</imageHeight>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
     <speedX>200</speedX>
     <speedY>200</speedY>
@@ -177,7 +177,7 @@
     <transparency>true</transparency>
   </border>
   <startLoc x="20" y="400"/>
-  <scale>3</scale>
+  <scale>1</scale>
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
@@ -190,7 +190,7 @@
     <transparency>true</transparency>
   </border>
   <startLoc x="800" y="400"/>
-  <scale>3</scale>
+  <scale>1</scale>
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>

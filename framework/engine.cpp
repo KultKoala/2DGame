@@ -91,12 +91,16 @@ void Engine::draw() const {
   else{
     io.writeText("No wall collisions", 5,Gamedata::getInstance().getXmlInt("view/height")-100);
   }
+  std::stringstream fps;
+  fps << "FPS " << clock.getFps();
+  std::string fpsStr = fps.str();
+  io.writeText(fpsStr, 5, Gamedata::getInstance().getXmlInt("view/height")-150);
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
-  checkForCollisions();
-  checkBorderCollisions();
+  // checkForCollisions();
+  // checkBorderCollisions();
   for(auto actor: actors){
     actor->update(ticks);
   }
@@ -122,10 +126,8 @@ void Engine::checkBorderCollisions(){
   //check for shadow collisions
   shadowCollision = false;
     for ( const Drawable* d : actors ) {
-      if(rooms[currentRoom]->getBorderSurface() && d->getBorderSurface()){
-        if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
-          shadowCollision = true;
-        }
+      if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
+        shadowCollision = true;
         playerCharacter->shadowCollided(shadowCollision);
       }
     }
