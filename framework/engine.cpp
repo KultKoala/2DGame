@@ -74,8 +74,6 @@ void Engine::draw() const {
   }
   hud.draw();
 
-  viewport.draw();
-
   //username in lower lefthand corner
   io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
   if(collision){
@@ -101,11 +99,11 @@ void Engine::draw() const {
 void Engine::update(Uint32 ticks) {
   // checkForCollisions();
   // checkBorderCollisions();
-  for(auto actor: actors){
-    actor->update(ticks);
-  }
   for(auto world:worldBackgrounds){
     world->update();
+  }
+  for(auto actor: actors){
+    actor->update(ticks);
   }
 
   viewport.update(); // always update viewport last

@@ -122,18 +122,18 @@ Player& Player::operator=(const Player& s) {
 }
 
 void Player::draw() const {
-	shadow->draw(getX(),getY(),getScale());
+	shadow->draw(getX(),getY());
 
   if(rolling){
-		if(movingLeft)rollLeftAnim[currentFrame]->draw(getX(),getY(),getScale());
-		else rollRightAnim[currentFrame]->draw(getX(),getY(),getScale());
+		if(movingLeft)rollLeftAnim[currentFrame]->draw(getX(),getY());
+		else rollRightAnim[currentFrame]->draw(getX(),getY());
     return;
   }
 
-	if(movingLeft && movingDown) leftDownAnim[currentFrame]->draw(getX(), getY(), getScale());
-	else if(!movingLeft && movingDown) rightDownAnim[currentFrame]->draw(getX(), getY(), getScale());
-	else if(!movingLeft && !movingDown) rightUpAnim[currentFrame]->draw(getX(), getY(), getScale());
-	else leftUpAnim[currentFrame]->draw(getX(), getY(), getScale());
+	if(movingLeft && movingDown) leftDownAnim[currentFrame]->draw(getX(), getY());
+	else if(!movingLeft && movingDown) rightDownAnim[currentFrame]->draw(getX(), getY());
+	else if(!movingLeft && !movingDown) rightUpAnim[currentFrame]->draw(getX(), getY());
+	else leftUpAnim[currentFrame]->draw(getX(), getY());
 
 }
 
@@ -168,10 +168,21 @@ void Player::down() {
 }
 void Player::attack() {}
 void Player::roll() {
-  setVelocity(Vector2f(getVelocityX()*3,getVelocityY()*3));
+
+	Vector2f rollVec = getVelocity();
+	if(rollVec[0]==0 && rollVec[1]==0){
+		if(movingLeft){
+			setVelocity(Vector2f(-1*initialVelocity[0],0)*3);
+		} else {
+			setVelocity(Vector2f(initialVelocity[0],0)*3);
+		}
+	}
+	else{
+		rollVec = rollVec.normalize();
+		setVelocity(rollVec *initialVelocity.magnitude()*3);
+	}
   rolling = true;
 }
-
 
 void Player::update(Uint32 ticks) {
 
