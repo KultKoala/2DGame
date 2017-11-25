@@ -32,8 +32,8 @@ private:
   Player *playerCharacter;
   HUD hud;
   CollisionStrategy *strategy;
-  bool collision;
-  bool shadowCollision;
+  bool coll;
+  bool shadowcoll;
 
 
   bool makeVideo;

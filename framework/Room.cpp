@@ -42,8 +42,8 @@ inline namespace{
 
 void Room::draw() const {
   if(getScale() < SCALE_EPSILON) return;
-  image->draw(getX(), getY());
-  border->draw(getX(),getY());
+  image->draw(getX(), getY(),getScale());
+  border->draw(getX(),getY(),getScale());
 }
 
 void Room::update(Uint32 ticks) {

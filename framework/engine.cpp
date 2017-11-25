@@ -41,8 +41,8 @@ Engine::Engine() :
   playerCharacter(new Player("playerCharacter")),
   hud(renderer),
   strategy(new PerPixelCollisionStrategy),
-  collision(false),
-  shadowCollision(false),
+  coll(false),
+  shadowcoll(false),
   makeVideo( false )
 {
   worldBackgrounds.push_back(new World("sky", Gamedata::getInstance().getXmlInt("sky/factor") ));
@@ -74,16 +74,19 @@ void Engine::draw() const {
   }
   hud.draw();
 
+  std::stringstream s;
+  s<<playerCharacter->getVelocityX()<<" "<<playerCharacter->getVelocityY();
+  io.writeText(s.str(), 5, Gamedata::getInstance().getXmlInt("view/height")-300);
   //username in lower lefthand corner
   io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
-  if(collision){
+  if(coll){
     io.writeText("Player is colliding with enemy", 5,  Gamedata::getInstance().getXmlInt("view/height")-50);
   }
   else{
     io.writeText("Player is not colliding with enemy", 5,  Gamedata::getInstance().getXmlInt("view/height")-50);
   }
 
-  if(shadowCollision){
+  if(shadowcoll){
     io.writeText("Collision with a wall by actor", 5,Gamedata::getInstance().getXmlInt("view/height")-100);
   }
   else{
@@ -97,8 +100,8 @@ void Engine::draw() const {
 }
 
 void Engine::update(Uint32 ticks) {
-  // checkForCollisions();
-  // checkBorderCollisions();
+  checkForCollisions();
+  checkBorderCollisions();
   for(auto world:worldBackgrounds){
     world->update();
   }
@@ -110,24 +113,25 @@ void Engine::update(Uint32 ticks) {
 }
 
 void Engine::checkForCollisions() {
-  collision = false;
+  coll = false;
 //check for hits with other actors
   for ( const Drawable* d : actors ) {
     if (playerCharacter !=d && strategy->execute(*playerCharacter, *d) ) {
-      playerCharacter->collided();
+      coll = true;
     }
+    playerCharacter->collided(coll);
   }
 }
 
 void Engine::checkBorderCollisions(){
 
   //check for shadow collisions
-  shadowCollision = false;
-    for ( const Drawable* d : actors ) {
+  shadowcoll = false;
+    for ( Drawable* d : actors ) {
       if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
-        shadowCollision = true;
-        playerCharacter->shadowCollided(shadowCollision);
+        shadowcoll = true;
       }
+      d->shadowCollided(shadowcoll);
     }
   }
 
@@ -148,7 +152,7 @@ void Engine::play() {
       keystate = SDL_GetKeyboardState(NULL);
       if (event.type ==  SDL_QUIT) { done = true; break; }
       if(event.type == SDL_KEYDOWN) {
-        if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
+        if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]){
           done = true;
           break;
         }
@@ -174,17 +178,17 @@ void Engine::play() {
         if(!playerCharacter->getShadowCollided()){
           if (keystate[SDL_SCANCODE_SLASH]) {
             playerCharacter->roll();
-          }
-          else if (keystate[SDL_SCANCODE_PERIOD]) {
+          } else if (keystate[SDL_SCANCODE_PERIOD]) {
             playerCharacter->attack();
           }
         }
       }
+    }
 
       // In this section of the event loop we allow key bounce:
 
       ticks = clock.getElapsedTicks();
-      if ( ticks > 0 ) {
+      if ( ticks > 0) {
         clock.incrFrame();
         if (keystate[SDL_SCANCODE_A]) {
           playerCharacter->left();
@@ -207,4 +211,3 @@ void Engine::play() {
       }
     }
   }
-}

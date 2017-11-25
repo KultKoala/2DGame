@@ -9,6 +9,11 @@
 #include <list>
 #include "Room.h"
 
+enum playerAnim{
+  LEFTUP,RIGHTUP,RIGHTDOWN,LEFTDOWN,ROLLLEFT,ROLLRIGHT,
+  ATTACKLEFT,ATTACKRIGHT
+};
+
 class Player : public Drawable {
 public:
   Player(const std::string&);
@@ -17,11 +22,7 @@ public:
   virtual void draw() const;
   virtual void update(Uint32 ticks);
 
-  void collided() { collision = true; }
-  bool getCollided ()const {return collision;}
-  void shadowCollided(bool coll){shadowCollision = coll;}
-  bool getShadowCollided () const{return shadowCollision;}
-  void missed() { collision = false; }
+
   void setCurrentRoom(Room *);
 
   virtual const Image* getImage() const {
@@ -89,12 +90,17 @@ protected:
   std::vector<Image *> leftDownAnim;
   std::vector<Image *> rollLeftAnim;
   std::vector<Image *> rollRightAnim;
+  std::vector<Image *>attackLeftAnim;
+  std::vector<Image *>attackRightAnim;
+  std::vector<Image *>shovelLeftAnim;
+  std::vector<Image *>shovelRightAnim;
 
   Image * shadow;
   bool movingLeft;
   bool movingDown;
   bool stopped;
   bool rolling;
+  bool attacking;
   unsigned currentFrame;
   unsigned numberOfFrames;
   unsigned frameInterval;
@@ -105,12 +111,7 @@ protected:
   void advanceFrame(Uint32 ticks);
   Player& operator=(const Player&);
 private:
-  //this collision will be used for interacting with enemies and taking damage
-  //uses
-  bool collision;
-
-  //TODO uses shadow sprite  to check against non-hostile entities like walls or passive enemies
-  bool shadowCollision;
   Vector2f initialVelocity;
+  Vector2f previousVel;
 };
 #endif

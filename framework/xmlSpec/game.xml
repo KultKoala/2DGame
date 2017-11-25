@@ -30,12 +30,12 @@
 </view>
 
 <world>
-  <width>5000</width>
+  <width>2000</width>
   <height>1000</height>
 </world>
 
 <sky>
-  <file>assets/sky.png</file>
+  <file>assets/white.png</file>
   <factor>3</factor>
   <transparency>false</transparency>
 </sky>
@@ -59,9 +59,9 @@
 <font name="font">
   <file>fonts/Pixel.ttf</file>
   <size>24</size>
-  <red>255</red>
-  <green>255</green>
-  <blue>255</blue>
+  <red>0</red>
+  <green>0</green>
+  <blue>0</blue>
   <alpha>255</alpha>
 
 </font>
@@ -87,8 +87,6 @@
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
     <transparency>true</transparency>
   </rollLeftAnim>
 
@@ -98,8 +96,6 @@
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
     <transparency>true</transparency>
   </rollRightAnim>
 
@@ -110,8 +106,6 @@
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
     <transparency>true</transparency>
   </leftUpAnim>
   <leftDownAnim>
@@ -120,8 +114,6 @@
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
     <transparency>true</transparency>
   </leftDownAnim>
   <rightUpAnim>
@@ -130,8 +122,6 @@
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
     <transparency>true</transparency>
   </rightUpAnim>
   <rightDownAnim>
@@ -140,10 +130,53 @@
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
     <frameInterval>100</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
     <transparency>true</transparency>
   </rightDownAnim>
+
+  <rightDownAnim>
+    <file>assets/Dark_Guy_right_down.png</file>
+    <frames>6</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </rightDownAnim>
+
+  <attackLeftAnim>
+    <file>assets/Char_left_attack.png</file>
+    <frames>5</frames>
+    <imageWidth>128</imageWidth>
+    <imageHeight>128</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </attackLeftAnim>
+
+  <attackRightAnim>
+    <file>assets/Char_right_attack.png</file>
+    <frames>5</frames>
+    <imageWidth>128</imageWidth>
+    <imageHeight>128</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </attackRightAnim>
+
+  <shovelLeftAnim>
+    <file>assets/Shovel_left_attack.png</file>
+    <frames>5</frames>
+    <imageWidth>128</imageWidth>
+    <imageHeight>128</imageHeight>
+    <frameInterval>50</frameInterval>
+    <transparency>true</transparency>
+  </shovelLeftAnim>
+
+  <shovelRightAnim>
+    <file>assets/Shovel_right_attack.png</file>
+    <frames>5</frames>
+    <imageWidth>128</imageWidth>
+    <imageHeight>128</imageHeight>
+    <frameInterval>50</frameInterval>
+    <transparency>true</transparency>
+  </shovelRightAnim>
 
 </playerCharacter>
 
@@ -177,7 +210,7 @@
     <transparency>true</transparency>
   </border>
   <startLoc x="20" y="400"/>
-  <scale>1</scale>
+  <scale>3</scale>
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
@@ -190,7 +223,7 @@
     <transparency>true</transparency>
   </border>
   <startLoc x="800" y="400"/>
-  <scale>1</scale>
+  <scale>3</scale>
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
