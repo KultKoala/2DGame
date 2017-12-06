@@ -10,6 +10,7 @@
 #include "helperFunctions.h"
 #include "Room.h"
 #include "spiderEnemy.h"
+#include "explodingSprite.h"
 
 class spiderEnemy;
 
@@ -19,6 +20,8 @@ public:
   Player(const Player&);
 
   virtual void draw() const;
+  void explode();
+  void reset();
   virtual void update(Uint32 ticks);
 
   void updateCurrentAnim(){
@@ -59,6 +62,8 @@ public:
 
   void setCurrentRoom(Room *);
 
+  playerState getState(){return pState;}
+
   virtual const Image* getImage() const {
     return getCurrentAnim()[currentFrame];
   }
@@ -82,13 +87,21 @@ public:
     return animMap.at(currentAnim);
   }
 
-  int getCurrentAnimFInterval() const{
+  playerAnim getAnimIndex() const{
+    return currentAnim;
+  }
+
+  int getCurrentAnimInterval() const{
     return (animInterval.at(currentAnim));
   }
 
   const std::vector<Image*> getWeaponAnim() const {
     return shovelMap.at(currentAnim);
   }
+  const SDL_Surface* getWeaponSurface() const {
+    return (getWeaponAnim()[currentFrame]->getSurface());
+  }
+
   //setting animations
   void right();
   void left();
@@ -104,6 +117,7 @@ public:
 
 
 protected:
+  ExplodingSprite *exp;
   std::list<spiderEnemy*> observers;
   Room *currentRoom;
   std::map<playerAnim, std::vector<Image *>> animMap;

@@ -1,10 +1,12 @@
 #include <cmath>
 #include "drawable.h"
+#include "player.h"
 
 class CollisionStrategy {
 public:
   virtual bool execute(const Drawable&, const Drawable&) const = 0;
   virtual bool executeBorder(const Drawable&, const Drawable&) const {return false;};
+  virtual bool executeWeapon(const Player&, const Drawable&) const {return false;};
   virtual void draw() const = 0;
   virtual ~CollisionStrategy() {}
 };
@@ -28,6 +30,7 @@ class PerPixelCollisionStrategy : public CollisionStrategy {
 public:
   PerPixelCollisionStrategy() {}
   virtual bool execute(const Drawable&, const Drawable&) const;
+  virtual bool executeWeapon(const Player& obj1, const Drawable& obj2) const;
   virtual bool executeBorder(const Drawable&, const Drawable&) const;
   virtual void draw() const;
 private:

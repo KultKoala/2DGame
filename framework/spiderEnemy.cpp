@@ -10,8 +10,14 @@
 
 
 void spiderEnemy::advanceFrame(Uint32 ticks) {
+	updateCurrentAnim();
 	timeSinceLastFrame += ticks;
-	if (timeSinceLastFrame > animInterval.at(currentAnim)) {
+	if(exp){
+		currentFrame = currentFrame+1;
+		return;
+	}
+
+	if (timeSinceLastFrame > getCurrentAnimInterval()) {
     currentFrame = (currentFrame+1) % animMap[currentAnim].size();
 		timeSinceLastFrame = 0;
 	}
@@ -67,9 +73,11 @@ void spiderEnemy::advanceFrame(Uint32 ticks) {
             Vector2f(Gamedata::getInstance().getXmlInt(name+"/speedX"),
                      Gamedata::getInstance().getXmlInt(name+"/speedY"))
             ),
+	exp(nullptr),
   playerPos(pos),
   playerWidth(w),
   playerHeight(h),
+	currentRoom(),
  	animMap(),
   animInterval(),
  	shadow(RenderContext::getInstance()->getImage(name+"/shadow")),
@@ -78,8 +86,6 @@ void spiderEnemy::advanceFrame(Uint32 ticks) {
  	pState(playerState::MOVING),
  	currentAnim(playerAnim::RIGHTDOWN),
    currentFrame(0),
-   numberOfFrames( Gamedata::getInstance().getXmlInt(name+"/frames") ),
-   frameInterval( Gamedata::getInstance().getXmlInt(name+"/frameInterval")),
    timeSinceLastFrame( 0 ),
    worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
    worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
@@ -104,11 +110,13 @@ void spiderEnemy::advanceFrame(Uint32 ticks) {
  	animInterval[playerAnim::ATTACKRIGHT] = Gamedata::getInstance().getXmlInt(name+"/attackAnim/frameInterval");
 
  	setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
+	stop();
   }
 
 spiderEnemy::spiderEnemy(const spiderEnemy& s) :
 
   Drawable(s),
+	exp(s.exp),
 	playerPos(s.playerPos),
 	playerWidth(s.playerWidth),
 	playerHeight(s.playerHeight),
@@ -121,8 +129,6 @@ spiderEnemy::spiderEnemy(const spiderEnemy& s) :
 	pState(s.pState),
 	currentAnim(s.currentAnim),
   currentFrame(s.currentFrame),
-  numberOfFrames( s.numberOfFrames ),
-  frameInterval( s.frameInterval ),
   timeSinceLastFrame( s.timeSinceLastFrame ),
   worldWidth( s.worldWidth ),
   worldHeight( s.worldHeight ),
@@ -139,8 +145,6 @@ spiderEnemy& spiderEnemy::operator=(const spiderEnemy& s) {
 	mY = s.mY;
 	pState = s.pState;
   currentFrame = (s.currentFrame);
-  numberOfFrames = ( s.numberOfFrames );
-  frameInterval = ( s.frameInterval );
   timeSinceLastFrame = ( s.timeSinceLastFrame );
   worldWidth = ( s.worldWidth );
   worldHeight = ( s.worldHeight );
@@ -151,6 +155,10 @@ spiderEnemy& spiderEnemy::operator=(const spiderEnemy& s) {
 }
 
 void spiderEnemy::draw() const {
+	if(exp){
+		exp->draw();
+		return;
+	}
 	shadow->draw(getX(),getY(),getScale());
 	if(currentAnim ==playerAnim::ATTACKLEFT || currentAnim == playerAnim::ATTACKRIGHT){
 		getCurrentAnim()[currentFrame]->draw(getX(),getY(),getScale());
@@ -159,17 +167,26 @@ void spiderEnemy::draw() const {
 	getCurrentAnim()[currentFrame]->draw(getX(),getY(),getScale());
 }
 
+void spiderEnemy::reset(){
+	setPosition(Vector2f(Gamedata::getInstance().getXmlInt(getName()+"/startLoc/x"),
+					 Gamedata::getInstance().getXmlInt(getName()+"/startLoc/y")));
+}
+
+void spiderEnemy::explode() {
+  if ( !exp ) exp = new ExplodingSprite(Sprite(getName(),getPosition(),getVelocity(),getImage()));
+}
+
 void spiderEnemy::stop() {
   setVelocity(Vector2f(0,0));
 }
 
 void spiderEnemy::right() {
-  if ( getX() < worldWidth-getScaledWidth() && pState != playerState::ROLLING) {
+  if ( getX() < worldWidth-getScaledWidth()) {
     setVelocityX(initialVelocity[0]);
     mX = moveX::RIGHT;
-		if(pState == playerState::STOPPED){
-			pState = playerState::MOVING;
-		}
+
+		pState = playerState::MOVING;
+
   }
 }
 void spiderEnemy::left()  {
@@ -194,10 +211,18 @@ void spiderEnemy::attack() {
 }
 
 void spiderEnemy::update(Uint32 ticks) {
+	if ( exp ) {
+		exp->update(ticks);
+		if ( exp->chunkCount() == 0 ) {
+			delete exp;
+			exp = NULL;
+		}
+		return;
+	}
 	//save velocity for calculations
 	previousVel = getVelocity();
 
-  if ( !getCollided() ) advanceFrame(ticks);
+  advanceFrame(ticks);
 	if(!getShadowCollided()){
 		Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
   	setPosition(getPosition() + incr);
@@ -208,7 +233,10 @@ void spiderEnemy::update(Uint32 ticks) {
     float distanceToEnemy = helperFunctions::distance( x, y, ex, ey );
 
     if  ( pState == playerState::MOVING ) {
-      if(distanceToEnemy < safeDistance) pState = playerState::ATTACKING;
+      if(distanceToEnemy < safeDistance){
+				 pState = playerState::ATTACKING;
+				 currentFrame = 0;
+			 }
     }
 		//attack player
     else if  ( pState == playerState::ATTACKING ) {
@@ -234,7 +262,7 @@ void spiderEnemy::update(Uint32 ticks) {
 		vec2[0]=vec2[0]/2;
 		vec2 =  vec2.normalize()* 0.001* initialVelocity.magnitude()*static_cast<float>(ticks);
 		setPosition(getPosition()+vec2);
-
+		currentFrame=0;
 	}
 
 
@@ -243,7 +271,5 @@ void spiderEnemy::update(Uint32 ticks) {
 
 	if (getVelocityY()>=0.01) mY = moveY::DOWN;
 	else if (getVelocityY()<0) mY = moveY::UP;
-	if(pState != playerState::ATTACKING)stop();
 	updateCurrentAnim();
-
 }

@@ -12,6 +12,11 @@ void Player::advanceFrame(Uint32 ticks) {
 	updateCurrentAnim();
 	timeSinceLastFrame += ticks;
 
+	if(exp){
+		currentFrame = currentFrame+1;
+		return;
+	}
+
 	if (timeSinceLastFrame > animInterval[playerAnim::ROLLLEFT] && pState ==playerState::ROLLING) {
 		currentFrame = (currentFrame+1);
 		if(currentFrame >= animMap[playerAnim::ROLLLEFT].size()){
@@ -25,7 +30,6 @@ void Player::advanceFrame(Uint32 ticks) {
 		if(currentFrame >=animMap[playerAnim::ATTACKLEFT].size()){
 			currentFrame =0;
 			pState = playerState::MOVING;
-			updateCurrentAnim();
 			return;
 		}
 		timeSinceLastFrame = 0;
@@ -52,7 +56,7 @@ Player::Player( const std::string& name) :
            Vector2f(Gamedata::getInstance().getXmlInt(name+"/speedX"),
                     Gamedata::getInstance().getXmlInt(name+"/speedY"))
            ),
-
+	exp(nullptr),
 	observers(),
 	currentRoom(),
 	animMap(),
@@ -100,6 +104,7 @@ Player::Player( const std::string& name) :
 Player::Player(const Player& s) :
 
   Drawable(s),
+	exp(s.exp),
 	observers(s.observers),
 	currentRoom(s.currentRoom),
 	animMap(s.animMap),
@@ -124,6 +129,9 @@ Player& Player::operator=(const Player& s) {
   Drawable::operator=(s);
 	observers = s.observers;
 	currentRoom = s.currentRoom;
+	animMap = s.animMap;
+	animInterval = s.animInterval;
+	shovelMap = s.shovelMap;
 	shadow = s.shadow;
 	mX = s.mX;
 	mY = s.mY;
@@ -141,13 +149,31 @@ Player& Player::operator=(const Player& s) {
 }
 
 void Player::draw() const {
+	if(exp){
+		exp->draw();
+		return;
+	}
+
 	shadow->draw(getX(),getY(),getScale());
 	if(currentAnim ==playerAnim::ATTACKLEFT || currentAnim == playerAnim::ATTACKRIGHT){
-		getCurrentAnim()[currentFrame]->draw(getX()-32,getY()-32,getScale());
-		getWeaponAnim()[currentFrame]->draw(getX()-32,getY()-32,getScale());
+		getCurrentAnim()[currentFrame]->draw(getX(),getY(),getScale());
+		getWeaponAnim()[currentFrame]->draw(getX(),getY(),getScale());
 		return;
 	}
 	getCurrentAnim()[currentFrame]->draw(getX(),getY(),getScale());
+}
+
+void Player::explode() {
+  if ( !exp ) exp = new ExplodingSprite(Sprite(getName(),getPosition(),getVelocity(),getImage()));
+}
+
+void Player::reset(){
+	setPosition(Vector2f(Gamedata::getInstance().getXmlInt(getName()+"/startLoc/x"),
+					 Gamedata::getInstance().getXmlInt(getName()+"/startLoc/y")));
+
+	for(auto ob :observers){
+		ob->reset();
+	}
 }
 
 void Player::stop() {
@@ -218,6 +244,16 @@ void Player::roll() {
 
 
 void Player::update(Uint32 ticks) {
+	if ( exp ) {
+		exp->update(ticks);
+		if ( exp->chunkCount() == 0 ) {
+			delete exp;
+			exp = NULL;
+		}
+		return;
+	}
+
+
 	//save velocity for calculations
 	previousVel = getVelocity();
 	std::list<spiderEnemy*>::iterator ptr = observers.begin();
@@ -241,6 +277,7 @@ void Player::update(Uint32 ticks) {
 		vec[0]=vec[0]/2;
 		vec =  vec.normalize()* 0.001* initialVelocity.magnitude()*static_cast<float>(ticks);
 		setPosition(getPosition()+vec);
+		updateCurrentAnim();
 
 
 	}
@@ -266,4 +303,9 @@ void Player::detach( spiderEnemy* o ) {
   }
 }
 
-void Player::setCurrentRoom(Room *r){currentRoom = r;}
+void Player::setCurrentRoom(Room *r){
+	currentRoom = r;
+	for(auto obs: observers){
+		obs->setCurrentRoom(r);
+	}
+}

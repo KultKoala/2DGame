@@ -75,30 +75,13 @@ void Engine::draw() const {
 
   std::stringstream s;
   s<<playerCharacter->getVelocityX()<<" "<<playerCharacter->getVelocityY();
-  io.writeText(s.str(), 5, Gamedata::getInstance().getXmlInt("view/height")-300);
   //username in lower lefthand corner
   io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
-  if(coll){
-    io.writeText("Player is colliding with enemy", 5,  Gamedata::getInstance().getXmlInt("view/height")-50);
-  }
-  else{
-    io.writeText("Player is not colliding with enemy", 5,  Gamedata::getInstance().getXmlInt("view/height")-50);
-  }
-
-  if(shadowcoll){
-    io.writeText("Collision with a wall by actor", 5,Gamedata::getInstance().getXmlInt("view/height")-100);
-  }
-  else{
-    io.writeText("No wall collisions", 5,Gamedata::getInstance().getXmlInt("view/height")-100);
-  }
-  std::stringstream fps;
-  fps << "FPS " << clock.getFps();
-  std::string fpsStr = fps.str();
-  io.writeText(fpsStr, 5, Gamedata::getInstance().getXmlInt("view/height")-150);
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
+  checkforWeaponCollisions();
   checkForCollisions();
   checkBorderCollisions();
   for(auto world:worldBackgrounds){
@@ -111,24 +94,40 @@ void Engine::update(Uint32 ticks) {
   viewport.update(); // always update viewport last
 }
 
+void Engine::checkforWeaponCollisions(){
+  shadowcoll = false;
+//check for hits with other actors
+  if(playerCharacter->getAnimIndex()!= playerAnim::ATTACKLEFT && playerCharacter->getAnimIndex()!=playerAnim::ATTACKRIGHT) return;
+  for ( Drawable* d : actors ) {
+    if (playerCharacter !=d && strategy->executeWeapon(*playerCharacter, *d) ) {
+      d->collided(true);
+      shadowcoll=true;
+      static_cast<spiderEnemy*>(d)->explode();
+    } else{
+      d->collided(false);
+    }
+  }
+}
+
 void Engine::checkForCollisions() {
   coll = false;
 //check for hits with other actors
-  for ( const Drawable* d : actors ) {
+  for ( Drawable* d : actors ) {
     if (playerCharacter !=d && strategy->execute(*playerCharacter, *d) ) {
       coll = true;
+      playerCharacter->collided(true);
+      playerCharacter->explode();
+      playerCharacter->reset();
+    } else{
+    playerCharacter->collided(false);
     }
-    playerCharacter->collided(coll);
   }
 }
 
 void Engine::checkBorderCollisions(){
-
   //check for shadow collisions
-  shadowcoll = false;
     for ( Drawable* d : actors ) {
       if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
-        shadowcoll = true;
         d->shadowCollided(true);
       } else {
         d->shadowCollided(false);

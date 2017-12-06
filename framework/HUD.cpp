@@ -16,6 +16,7 @@ title(Gamedata::getInstance().getXmlStr("HUD/title")),
 line1(Gamedata::getInstance().getXmlStr("HUD/line1")),
 line2(Gamedata::getInstance().getXmlStr("HUD/line2")),
 line3(Gamedata::getInstance().getXmlStr("HUD/line3")),
+line4(Gamedata::getInstance().getXmlStr("HUD/line4")),
 io(IOmod::getInstance())
 
 { }
@@ -29,6 +30,8 @@ void HUD::draw() const{
     io.writeText(line1,screenWidth-hudwidth,linespace);
     io.writeText(line2,screenWidth-hudwidth,linespace*2);
     io.writeText(line3,screenWidth-hudwidth,linespace*3);
+    io.writeText(line4,screenWidth-hudwidth,linespace*4);
+
 
  }
 }
