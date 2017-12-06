@@ -9,33 +9,38 @@
 
 
 void Player::advanceFrame(Uint32 ticks) {
+	updateCurrentAnim();
 	timeSinceLastFrame += ticks;
 
-	if (timeSinceLastFrame > frameInterval && rolling) {
+	if (timeSinceLastFrame > animInterval[playerAnim::ROLLLEFT] && pState ==playerState::ROLLING) {
 		currentFrame = (currentFrame+1);
-		if(currentFrame >= rollLeftAnim.size()){
+		if(currentFrame >= animMap[playerAnim::ROLLLEFT].size()){
 			currentFrame =0;
-			rolling = false;
+			pState = playerState::MOVING;
+			return;
 		}
 		timeSinceLastFrame = 0;
-	} else if(timeSinceLastFrame > frameInterval && attacking){
+	} else if(timeSinceLastFrame > animInterval[playerAnim::ATTACKLEFT] && pState==playerState::ATTACKING){
 		currentFrame = (currentFrame+1);
-		if(currentFrame == attackLeftAnim.size()){
+		if(currentFrame >=animMap[playerAnim::ATTACKLEFT].size()){
 			currentFrame =0;
-			attacking = false;
+			pState = playerState::MOVING;
+			updateCurrentAnim();
+			return;
 		}
 		timeSinceLastFrame = 0;
+		return;
 	}
 
 	//if no movement return resting frame at 0 and not rolling or attacking
-	if(getVelocityX()==0 && getVelocityY()==0 && !rolling && !attacking){
+	if(getVelocityX()==0 && getVelocityY()==0 && pState == playerState::STOPPED){
 		timeSinceLastFrame =0;
 		currentFrame = 0;
 		return;
 	}
 
-	if (timeSinceLastFrame > frameInterval) {
-    currentFrame = (currentFrame+1) % numberOfFrames;
+	if (timeSinceLastFrame > animInterval.at(currentAnim) && pState == playerState::MOVING) {
+    currentFrame = (currentFrame+1) % animMap[currentAnim].size();
 		timeSinceLastFrame = 0;
 	}
 }
@@ -50,23 +55,14 @@ Player::Player( const std::string& name) :
 
 	observers(),
 	currentRoom(),
-	leftUpAnim( RenderContext::getInstance()->getImages(name+"/leftUpAnim") ),
-	rightUpAnim( RenderContext::getInstance()->getImages(name+"/rightUpAnim") ),
- 	rightDownAnim( RenderContext::getInstance()->getImages(name+"/rightDownAnim") ),
-	leftDownAnim( RenderContext::getInstance()->getImages(name+"/leftDownAnim") ),
-	rollLeftAnim(RenderContext::getInstance()->getImages(name+"/rollLeftAnim") ),
-	rollRightAnim(RenderContext::getInstance()->getImages(name+"/rollRightAnim") ),
-	attackLeftAnim(RenderContext::getInstance()->getImages(name+"/attackLeftAnim") ),
-	attackRightAnim(RenderContext::getInstance()->getImages(name+"/attackRightAnim") ),
-	shovelLeftAnim(RenderContext::getInstance()->getImages(name+"/shovelLeftAnim") ),
-	shovelRightAnim(RenderContext::getInstance()->getImages(name+"/shovelRightAnim") ),
-
+	animMap(),
+  animInterval(),
+	shovelMap(),
 	shadow(RenderContext::getInstance()->getImage(name+"/shadow")),
-  movingLeft(false),
-  movingDown(true),
-	stopped(true),
-	rolling(false),
-	attacking(false),
+  mX(moveX::RIGHT),
+	mY(moveY::DOWN),
+	pState(playerState::NONE),
+	currentAnim(playerAnim::RIGHTDOWN),
   currentFrame(0),
   numberOfFrames( Gamedata::getInstance().getXmlInt(name+"/frames") ),
   frameInterval( Gamedata::getInstance().getXmlInt(name+"/frameInterval")),
@@ -75,29 +71,45 @@ Player::Player( const std::string& name) :
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
 	initialVelocity(getVelocity()),
 	previousVel()
-{ setScale(Gamedata::getInstance().getXmlInt(name+"/scale")); }
+{
+	//animation read in
+	animMap[playerAnim::LEFTUP] = RenderContext::getInstance()->getImages(name+"/leftUpAnim");
+	animMap[playerAnim::RIGHTUP] = RenderContext::getInstance()->getImages(name+"/rightUpAnim");
+	animMap[playerAnim::RIGHTDOWN] = RenderContext::getInstance()->getImages(name+"/rightDownAnim");
+	animMap[playerAnim::LEFTDOWN] = RenderContext::getInstance()->getImages(name+"/leftDownAnim");
+	animMap[playerAnim::ROLLLEFT] = RenderContext::getInstance()->getImages(name+"/rollLeftAnim");
+	animMap[playerAnim::ROLLRIGHT] = RenderContext::getInstance()->getImages(name+"/rollRightAnim");
+	animMap[playerAnim::ATTACKLEFT] = RenderContext::getInstance()->getImages(name+"/attackLeftAnim");
+	animMap[playerAnim::ATTACKRIGHT] = RenderContext::getInstance()->getImages(name+"/attackRightAnim");
+
+	//anim interval size read in
+	animInterval[playerAnim::LEFTUP] = Gamedata::getInstance().getXmlInt(name+"/leftUpAnim/frameInterval");
+	animInterval[playerAnim::RIGHTUP] = Gamedata::getInstance().getXmlInt(name+"/rightUpAnim/frameInterval");
+	animInterval[playerAnim::RIGHTDOWN] = Gamedata::getInstance().getXmlInt(name+"/rightDownAnim/frameInterval");
+	animInterval[playerAnim::LEFTDOWN] = Gamedata::getInstance().getXmlInt(name+"/leftDownAnim/frameInterval");
+	animInterval[playerAnim::ROLLLEFT] = Gamedata::getInstance().getXmlInt(name+"/rollLeftAnim/frameInterval");
+	animInterval[playerAnim::ROLLRIGHT] = Gamedata::getInstance().getXmlInt(name+"/rollRightAnim/frameInterval");
+	animInterval[playerAnim::ATTACKLEFT] = Gamedata::getInstance().getXmlInt(name+"/attackLeftAnim/frameInterval");
+	animInterval[playerAnim::ATTACKRIGHT] = Gamedata::getInstance().getXmlInt(name+"/attackRightAnim/frameInterval");
+
+	shovelMap[playerAnim::ATTACKLEFT] = RenderContext::getInstance()->getImages(name+"/shovelLeftAnim");
+	shovelMap[playerAnim::ATTACKRIGHT] = 	RenderContext::getInstance()->getImages(name+"/shovelRightAnim");
+	setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
+ }
 
 Player::Player(const Player& s) :
 
   Drawable(s),
 	observers(s.observers),
 	currentRoom(s.currentRoom),
-	leftUpAnim(s.leftUpAnim),
-	rightUpAnim(s.rightUpAnim),
-	rightDownAnim(s.rightDownAnim),
-	leftDownAnim(s.leftDownAnim),
-	rollLeftAnim(s.rollLeftAnim),
-	rollRightAnim(s.rollRightAnim),
-	attackLeftAnim(s.attackLeftAnim),
-	attackRightAnim(s.attackRightAnim),
-	shovelLeftAnim(s.shovelLeftAnim),
-	shovelRightAnim(s.shovelRightAnim),
+	animMap(s.animMap),
+	animInterval(s.animInterval),
+	shovelMap(s.shovelMap),
 	shadow(s.shadow),
-	movingLeft(s.movingLeft),
-	movingDown(s.movingDown),
-	stopped(s.stopped),
-	rolling(s.rolling),
-	attacking(s.attacking),
+	mX(s.mX),
+	mY(s.mY),
+	pState(s.pState),
+	currentAnim(s.currentAnim),
   currentFrame(s.currentFrame),
   numberOfFrames( s.numberOfFrames ),
   frameInterval( s.frameInterval ),
@@ -111,16 +123,11 @@ Player::Player(const Player& s) :
 Player& Player::operator=(const Player& s) {
   Drawable::operator=(s);
 	observers = s.observers;
-	shadow = (s.shadow);
-  leftUpAnim = (s.leftUpAnim);
-  leftDownAnim = (s.leftDownAnim);
-  rightUpAnim = (s.rightUpAnim);
-  rightDownAnim = (s.rightDownAnim);
-
-	rollLeftAnim = (s.rollLeftAnim);
-	rollRightAnim =(s.rollRightAnim);
-
-
+	currentRoom = s.currentRoom;
+	shadow = s.shadow;
+	mX = s.mX;
+	mY = s.mY;
+	pState = s.pState;
   currentFrame = (s.currentFrame);
   numberOfFrames = ( s.numberOfFrames );
   frameInterval = ( s.frameInterval );
@@ -129,86 +136,73 @@ Player& Player::operator=(const Player& s) {
   worldHeight = ( s.worldHeight );
 	observers = s.observers;
   initialVelocity = s.initialVelocity;
-	rolling = s.rolling;
-	attacking = s.attacking;
-	movingLeft = s.movingLeft;
-	movingDown = s.movingDown;
 	previousVel = s.previousVel;
   return *this;
 }
 
 void Player::draw() const {
 	shadow->draw(getX(),getY(),getScale());
-
-  if(rolling){
-		if(movingLeft)rollLeftAnim[currentFrame]->draw(getX(),getY(),getScale());
-		else rollRightAnim[currentFrame]->draw(getX(),getY(),getScale());
-    return;
-  }
-	//TODO: does this logic make sense
-	if(attacking){
-		if(movingLeft){
-			attackLeftAnim[currentFrame]->draw(getX()-32,getY()-32,getScale());
-			shovelLeftAnim[currentFrame]->draw(getX()-32,getY()-32,getScale());
-		}
-		else {
-			attackRightAnim[currentFrame]->draw(getX()-32,getY()-32,getScale());
-			shovelRightAnim[currentFrame]->draw(getX()-32,getY()-32,getScale());
-		}
+	if(currentAnim ==playerAnim::ATTACKLEFT || currentAnim == playerAnim::ATTACKRIGHT){
+		getCurrentAnim()[currentFrame]->draw(getX()-32,getY()-32,getScale());
+		getWeaponAnim()[currentFrame]->draw(getX()-32,getY()-32,getScale());
 		return;
 	}
-
-	if(movingLeft && movingDown) leftDownAnim[currentFrame]->draw(getX(), getY(),getScale());
-	else if(!movingLeft && movingDown) rightDownAnim[currentFrame]->draw(getX(), getY(),getScale());
-	else if(!movingLeft && !movingDown) rightUpAnim[currentFrame]->draw(getX(), getY(),getScale());
-	else leftUpAnim[currentFrame]->draw(getX(), getY(),getScale());
-
+	getCurrentAnim()[currentFrame]->draw(getX(),getY(),getScale());
 }
 
 void Player::stop() {
   setVelocity(Vector2f(0,0));
-  stopped = true;
+  pState = playerState::STOPPED;
 }
 
 void Player::right() {
-  if ( getX() < worldWidth-getScaledWidth() && !rolling) {
+  if ( getX() < worldWidth-getScaledWidth() && pState != playerState::ROLLING) {
     setVelocityX(initialVelocity[0]);
-    movingLeft = false;
+    mX = moveX::RIGHT;
+		if(pState == playerState::STOPPED){
+			pState = playerState::MOVING;
+		}
   }
 }
 void Player::left()  {
-  if ( getX() > 0 && !rolling) {
+  if ( getX() > 0 && pState != playerState::ROLLING) {
     setVelocityX(-initialVelocity[0]);
-    movingLeft = true;
+    mX = moveX::LEFT;
+		if(pState == playerState::STOPPED){
+			pState = playerState::MOVING;
+		}
   }
 }
 void Player::up()    {
-  if ( getY() > 0 && !rolling) {
+  if ( getY() > 0 && pState != playerState::ROLLING) {
     setVelocityY( -initialVelocity[1] );
-    movingDown= false;
+    mY =moveY::UP;
+		if(pState == playerState::STOPPED){
+			pState = playerState::MOVING;
+		}
   }
 }
 void Player::down() {
-  if ( getY() < worldHeight-getScaledHeight() && !rolling) {
+  if ( getY() < worldHeight-getScaledHeight() && pState != playerState::ROLLING) {
     setVelocityY( initialVelocity[1] );
-    movingDown = true;
+    mY = moveY::DOWN;
+		if(pState == playerState::STOPPED){
+				pState = playerState::MOVING;
+		}
   }
 }
 void Player::attack() {
 	setVelocity(Vector2f(0,0));
-	if(attacking == false){
-		attacking = true;
-		rolling = false;
+	if(pState != playerState::ATTACKING){
+		pState = playerState::ATTACKING;
 		currentFrame = 0;
 	}
 }
 void Player::roll() {
-	if(!rolling){
+	if(pState!=playerState::ROLLING){
 		Vector2f rollVec = previousVel;
-		std::cout<<rollVec;
 		if(rollVec[0]==0 && rollVec[1]==0){
-			std::cout<<"Entering"<<std::endl;
-			if(movingLeft){
+			if(mX == moveX::LEFT){
 				setVelocity(Vector2f(-1*initialVelocity.magnitude(),0)*1.5);
 			} else {
 				setVelocity(Vector2f(initialVelocity.magnitude(),0)*1.5);
@@ -216,24 +210,23 @@ void Player::roll() {
 		}else{
 			rollVec = rollVec.normalize();
 			setVelocity(Vector2f(rollVec[0],rollVec[1])*1.5*initialVelocity.magnitude());
-			std::cout<<getVelocity()<<std::endl;
-			std::cout<<"Being called"<<std::endl;
 		}
-	  rolling = true;
+	  pState = playerState::ROLLING;
 		currentFrame = 0;
 	}
 }
 
+
 void Player::update(Uint32 ticks) {
 	//save velocity for calculations
 	previousVel = getVelocity();
-	std::list<SmartSprite*>::iterator ptr = observers.begin();
+	std::list<spiderEnemy*>::iterator ptr = observers.begin();
 	while ( ptr != observers.end() ) {
 		(*ptr)->setPlayerPos( getPosition() );
 		++ptr;
 	}
 
-  if ( !getCollided() ) advanceFrame(ticks);
+  advanceFrame(ticks);
 	if(!getShadowCollided()){
 		Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
   	setPosition(getPosition() + incr);
@@ -253,17 +246,17 @@ void Player::update(Uint32 ticks) {
 	}
 
 
-	if (getVelocityX()>0) movingLeft = false;
-	else if(getVelocityX()<0) movingLeft = true;
+	if (getVelocityX()>0) mX = moveX::RIGHT;
+	else if(getVelocityX()<0) mX = moveX::LEFT;
 
-	if (getVelocityY()>=0.01) movingDown = true;
-	else if (getVelocityY()<0) movingDown = false;
+	if (getVelocityY()>=0.01) mY = moveY::DOWN;
+	else if (getVelocityY()<0) mY = moveY::UP;
 
-	if(!rolling)stop();
+	if(pState != playerState::ROLLING &&pState != playerState::ATTACKING)stop();
 
 }
-void Player::detach( SmartSprite* o ) {
-  std::list<SmartSprite*>::iterator ptr = observers.begin();
+void Player::detach( spiderEnemy* o ) {
+  std::list<spiderEnemy*>::iterator ptr = observers.begin();
   while ( ptr != observers.end() ) {
     if ( *ptr == o ) {
       ptr = observers.erase(ptr);

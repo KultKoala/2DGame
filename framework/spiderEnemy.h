@@ -1,5 +1,5 @@
-#ifndef PLAYER__H
-#define PLAYER__H
+#ifndef SPIDER__H
+#define SPIDER__H
 
 #include <string>
 #include <vector>
@@ -7,16 +7,16 @@
 #include "drawable.h"
 #include "smartSprite.h"
 #include <list>
-#include "helperFunctions.h"
+#include "player.h"
 #include "Room.h"
-#include "spiderEnemy.h"
+#include "helperFunctions.h"
 
-class spiderEnemy;
-
-class Player : public Drawable {
+class spiderEnemy : public Drawable {
 public:
-  Player(const std::string&);
-  Player(const Player&);
+  // spiderEnemy(const std::string&);
+  spiderEnemy(const spiderEnemy&);
+  spiderEnemy(const std::string&, const Vector2f& pos, int w, int h);
+
 
   virtual void draw() const;
   virtual void update(Uint32 ticks);
@@ -28,14 +28,6 @@ public:
       }
       else if (mX == moveX::RIGHT){
         currentAnim = playerAnim::ATTACKRIGHT;
-      }
-    }
-    else if(pState == playerState::ROLLING){
-      if(mX ==moveX::RIGHT){
-        currentAnim = playerAnim::ROLLRIGHT;
-      }
-      else if(mX == moveX::LEFT){
-        currentAnim = playerAnim::ROLLLEFT;
       }
     }
     else if(pState == playerState::MOVING){
@@ -86,29 +78,24 @@ public:
     return (animInterval.at(currentAnim));
   }
 
-  const std::vector<Image*> getWeaponAnim() const {
-    return shovelMap.at(currentAnim);
-  }
   //setting animations
   void right();
   void left();
   void up();
   void down();
   void attack();
-  void roll();
   void stop();
 
-  void attach( spiderEnemy* o ) { observers.push_back(o); }
-  void detach( spiderEnemy* o );
-
+void setPlayerPos(const Vector2f& p) { playerPos = p; }
 
 
 protected:
-  std::list<spiderEnemy*> observers;
+  Vector2f playerPos;
+  int playerWidth;
+  int playerHeight;
   Room *currentRoom;
   std::map<playerAnim, std::vector<Image *>> animMap;
   std::map<playerAnim, int> animInterval;
-  std::map<playerAnim, std::vector<Image *>> shovelMap;
   Image * shadow;
   moveX mX;
   moveY mY;
@@ -123,9 +110,10 @@ protected:
   int worldHeight;
 
   void advanceFrame(Uint32 ticks);
-  Player& operator=(const Player&);
+  spiderEnemy& operator=(const spiderEnemy&);
 private:
   Vector2f initialVelocity;
   Vector2f previousVel;
+  int safeDistance;
 };
 #endif

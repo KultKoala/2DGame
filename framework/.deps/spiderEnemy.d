@@ -1,5 +1,5 @@
-build/engine.o: engine.cpp gamedata.h vector2f.h parseXML.h engine.h \
- /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_main.h \
+build/spiderEnemy.o: spiderEnemy.cpp gamedata.h vector2f.h parseXML.h \
+ renderContext.h /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_main.h \
  /usr/include/SDL2/SDL_stdinc.h /usr/include/SDL2/SDL_config.h \
  /usr/include/SDL2/SDL_platform.h /usr/include/SDL2/begin_code.h \
  /usr/include/SDL2/close_code.h /usr/include/SDL2/SDL_assert.h \
@@ -20,11 +20,9 @@ build/engine.o: engine.cpp gamedata.h vector2f.h parseXML.h engine.h \
  /usr/include/SDL2/SDL_log.h /usr/include/SDL2/SDL_messagebox.h \
  /usr/include/SDL2/SDL_power.h /usr/include/SDL2/SDL_render.h \
  /usr/include/SDL2/SDL_system.h /usr/include/SDL2/SDL_timer.h \
- /usr/include/SDL2/SDL_version.h ioMod.h /usr/include/SDL2/SDL_ttf.h \
- /usr/include/SDL2/SDL.h renderContext.h imageFactory.h image.h \
- spriteSheet.h clock.h world.h viewport.h drawable.h HUD.h \
- frameGenerator.h player.h smartSprite.h sprite.h helperFunctions.h \
- Room.h spiderEnemy.h collisionStrategy.h multisprite.h
+ /usr/include/SDL2/SDL_version.h imageFactory.h image.h spriteSheet.h \
+ helperFunctions.h spiderEnemy.h drawable.h smartSprite.h sprite.h \
+ player.h Room.h
 
 gamedata.h:
 
@@ -32,7 +30,7 @@ vector2f.h:
 
 parseXML.h:
 
-engine.h:
+renderContext.h:
 
 /usr/include/SDL2/SDL.h:
 
@@ -120,44 +118,22 @@ engine.h:
 
 /usr/include/SDL2/SDL_version.h:
 
-ioMod.h:
-
-/usr/include/SDL2/SDL_ttf.h:
-
-/usr/include/SDL2/SDL.h:
-
-renderContext.h:
-
 imageFactory.h:
 
 image.h:
 
 spriteSheet.h:
 
-clock.h:
+helperFunctions.h:
 
-world.h:
-
-viewport.h:
+spiderEnemy.h:
 
 drawable.h:
-
-HUD.h:
-
-frameGenerator.h:
-
-player.h:
 
 smartSprite.h:
 
 sprite.h:
 
-helperFunctions.h:
+player.h:
 
 Room.h:
-
-spiderEnemy.h:
-
-collisionStrategy.h:
-
-multisprite.h:

@@ -48,10 +48,9 @@ Engine::Engine() :
   worldBackgrounds.push_back(new World("sky", Gamedata::getInstance().getXmlInt("sky/factor") ));
   worldBackgrounds.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor") ));
   worldBackgrounds.push_back(new World("ground", Gamedata::getInstance().getXmlInt("ground/factor") ));
-  // actors.push_back(new MultiSprite("Giants"));
   actors.push_back(playerCharacter);
-  // actors.push_back(new SmartSprite("face", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
-  // playerCharacter->attach(dynamic_cast<SmartSprite*>(actors[1]));
+  actors.push_back(new spiderEnemy("spiderEnemy", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
+  playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[1]));
   rooms.push_back(new Room("SnowyCorridor"));
   rooms.push_back(new Room("DarkLogCabin"));
   Viewport::getInstance().setObjectToTrack(rooms[0]);
@@ -130,8 +129,10 @@ void Engine::checkBorderCollisions(){
     for ( Drawable* d : actors ) {
       if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
         shadowcoll = true;
+        d->shadowCollided(true);
+      } else {
+        d->shadowCollided(false);
       }
-      d->shadowCollided(shadowcoll);
     }
   }
 

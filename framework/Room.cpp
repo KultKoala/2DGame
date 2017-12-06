@@ -14,15 +14,16 @@ Room::Room(const std::string& name) :
            ),
   image( RenderContext::getInstance()->getImage(name) ),
   border( RenderContext::getInstance()->getImage(name+"/border") ),
-
+  doors(),
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
   worldHeight(Gamedata::getInstance().getXmlInt("world/height"))
-{setScale(Gamedata::getInstance().getXmlInt(name+"/scale")); }
+{setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));}
 
 Room::Room(const Room& s) :
   Drawable(s),
   image(s.image),
   border(s.border),
+  doors(s.doors),
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
   worldHeight(Gamedata::getInstance().getXmlInt("world/height"))
 {}
@@ -44,6 +45,9 @@ void Room::draw() const {
   if(getScale() < SCALE_EPSILON) return;
   image->draw(getX(), getY(),getScale());
   border->draw(getX(),getY(),getScale());
+  for(auto door :doors){
+
+  }
 }
 
 void Room::update(Uint32 ticks) {

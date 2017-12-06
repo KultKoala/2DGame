@@ -3,6 +3,9 @@
 #include <string>
 #include <list>
 #include "drawable.h"
+#include <map>
+
+enum struct doorPlace {NONE,EAST,WEST,NORTH,SOUTH};
 
 class Room : public Drawable {
 public:
@@ -23,12 +26,15 @@ public:
   const SDL_Surface* getBorderSurface () const {
     return border->getSurface();
   }
+
+
   int getScaledWidth()  const { return getScale()*image->getWidth();  }
   int getScaledHeight() const { return getScale()*image->getHeight(); }
 
 private:
   const Image * image;
   const Image * border;
+  std::map<doorPlace, Image*> doors;
 
 
 protected:

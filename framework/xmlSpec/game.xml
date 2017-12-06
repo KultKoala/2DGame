@@ -86,7 +86,7 @@
     <frames>7</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>75</frameInterval>
     <transparency>true</transparency>
   </rollLeftAnim>
 
@@ -95,7 +95,7 @@
     <frames>7</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>75</frameInterval>
     <transparency>true</transparency>
   </rollRightAnim>
 
@@ -124,6 +124,7 @@
     <frameInterval>100</frameInterval>
     <transparency>true</transparency>
   </rightUpAnim>
+
   <rightDownAnim>
     <file>assets/Dark_Guy_right_down.png</file>
     <frames>6</frames>
@@ -147,7 +148,7 @@
     <frames>5</frames>
     <imageWidth>128</imageWidth>
     <imageHeight>128</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>50</frameInterval>
     <transparency>true</transparency>
   </attackLeftAnim>
 
@@ -156,7 +157,7 @@
     <frames>5</frames>
     <imageWidth>128</imageWidth>
     <imageHeight>128</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>50</frameInterval>
     <transparency>true</transparency>
   </attackRightAnim>
 
@@ -179,6 +180,38 @@
   </shovelRightAnim>
 
 </playerCharacter>
+
+<spiderEnemy>
+  <frames>2</frames>
+  <imageWidth>64</imageWidth>
+  <imageHeight>64</imageHeight>
+  <frameInterval>100</frameInterval>
+  <scale>1</scale>
+  <speedX>50</speedX>
+  <speedY>50</speedY>
+  <startLoc x="300" y="600"/>
+  <safeDistance>200</safeDistance>
+  <attackAnim>
+    <file>assets/spider_jump.png</file>
+    <frames>10</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </attackAnim>
+  <idleAnim>
+    <file>assets/spider.png</file>
+    <frames>2</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </idleAnim>
+  <shadow>
+    <file>assets/spider_shadow.png</file>
+    <transparency>true</transparency>
+  </shadow>
+</spiderEnemy>
 
 
 
