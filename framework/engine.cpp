@@ -76,7 +76,7 @@ void Engine::draw() const {
   std::stringstream s;
   s<<playerCharacter->getVelocityX()<<" "<<playerCharacter->getVelocityY();
   //username in lower lefthand corner
-  io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
+  // io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
   SDL_RenderPresent(renderer);
 }
 
@@ -103,6 +103,7 @@ void Engine::checkforWeaponCollisions(){
       d->collided(true);
       shadowcoll=true;
       static_cast<spiderEnemy*>(d)->explode();
+      static_cast<spiderEnemy*>(d)->reset();
     } else{
       d->collided(false);
     }
@@ -113,6 +114,7 @@ void Engine::checkForCollisions() {
   coll = false;
 //check for hits with other actors
   for ( Drawable* d : actors ) {
+    if(playerCharacter->getAnimIndex()== playerAnim::ATTACKLEFT && playerCharacter->getAnimIndex()==playerAnim::ATTACKRIGHT) return;
     if (playerCharacter !=d && strategy->execute(*playerCharacter, *d) ) {
       coll = true;
       playerCharacter->collided(true);
@@ -129,6 +131,7 @@ void Engine::checkBorderCollisions(){
     for ( Drawable* d : actors ) {
       if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
         d->shadowCollided(true);
+
       } else {
         d->shadowCollided(false);
       }
@@ -167,20 +170,19 @@ void Engine::play() {
         // if ( keystate[SDL_SCANCODE_T] ) {
         //   switchSprite();
         // }
-        if (keystate[SDL_SCANCODE_F4] && !makeVideo) {
-          std::cout << "Initiating frame capture" << std::endl;
-          makeVideo = true;
-        }
-        else if (keystate[SDL_SCANCODE_F4] && makeVideo) {
-          std::cout << "Terminating frame capture" << std::endl;
-          makeVideo = false;
-        }
-        if(!playerCharacter->getShadowCollided()){
-          if (keystate[SDL_SCANCODE_SLASH]) {
+        // if (keystate[SDL_SCANCODE_F4] && !makeVideo) {
+        //   std::cout << "Initiating frame capture" << std::endl;
+        //   makeVideo = true;
+        // }
+        // else if (keystate[SDL_SCANCODE_F4] && makeVideo) {
+        //   std::cout << "Terminating frame capture" << std::endl;
+        //   makeVideo = false;
+        // }
+        if (keystate[SDL_SCANCODE_SLASH]) {
             playerCharacter->roll();
-          } else if (keystate[SDL_SCANCODE_PERIOD]) {
-            playerCharacter->attack();
-          }
+        }
+        if (keystate[SDL_SCANCODE_PERIOD]) {
+          playerCharacter->attack();
         }
       }
     }
@@ -206,8 +208,8 @@ void Engine::play() {
 
       draw();
       update(ticks);
-      if ( makeVideo ) {
-        frameGen.makeFrame();
-      }
+      // if ( makeVideo ) {
+      //   frameGen.makeFrame();
+      // }
     }
   }

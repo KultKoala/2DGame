@@ -195,7 +195,7 @@
     <distance>50</distance>
   </chunk>
   <frames>2</frames>
-  <scale>1</scale>
+  <scale>2</scale>
   <speedX>30</speedX>
   <speedY>30</speedY>
   <startLoc x="400" y="600"/>

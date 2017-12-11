@@ -110,6 +110,7 @@ void spiderEnemy::advanceFrame(Uint32 ticks) {
  	animInterval[playerAnim::ATTACKRIGHT] = Gamedata::getInstance().getXmlInt(name+"/attackAnim/frameInterval");
 
  	setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
+	safeDistance = safeDistance*getScale();
 	stop();
   }
 
@@ -226,8 +227,8 @@ void spiderEnemy::update(Uint32 ticks) {
 	if(!getShadowCollided()){
 		Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
   	setPosition(getPosition() + incr);
-    float x= getX()+getImage()->getWidth()/2;
-    float y= getY()+getImage()->getHeight()/2;
+    float x= getX()+getScaledWidth()/2;
+    float y= getY()+getScaledHeight()/2;
     float ex= playerPos[0]+playerWidth/2;
     float ey= playerPos[1]+playerHeight/2;
     float distanceToEnemy = helperFunctions::distance( x, y, ex, ey );
@@ -244,7 +245,7 @@ void spiderEnemy::update(Uint32 ticks) {
 				pState = playerState::MOVING;
 				currentFrame=0;
 			}
-      else {
+      else{
         Vector2f vec(ex-x,ey-y);
         vec[0]=vec[0]/2;
         vec =  vec.normalize()* 0.001* initialVelocity.magnitude()*static_cast<float>(ticks);

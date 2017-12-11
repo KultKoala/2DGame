@@ -88,8 +88,8 @@ public:
   void down();
   void attack();
   void stop();
-
-void setPlayerPos(const Vector2f& p) { playerPos = p; }
+//changed to only update after a sequence of frames
+void setPlayerPos(const Vector2f& p) {if(currentFrame==0)playerPos = p; }
 
 
 protected:
