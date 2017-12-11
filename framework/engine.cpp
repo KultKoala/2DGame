@@ -170,14 +170,14 @@ void Engine::play() {
         // if ( keystate[SDL_SCANCODE_T] ) {
         //   switchSprite();
         // }
-        // if (keystate[SDL_SCANCODE_F4] && !makeVideo) {
-        //   std::cout << "Initiating frame capture" << std::endl;
-        //   makeVideo = true;
-        // }
-        // else if (keystate[SDL_SCANCODE_F4] && makeVideo) {
-        //   std::cout << "Terminating frame capture" << std::endl;
-        //   makeVideo = false;
-        // }
+        if (keystate[SDL_SCANCODE_F4] && !makeVideo) {
+          std::cout << "Initiating frame capture" << std::endl;
+          makeVideo = true;
+        }
+        else if (keystate[SDL_SCANCODE_F4] && makeVideo) {
+          std::cout << "Terminating frame capture" << std::endl;
+          makeVideo = false;
+        }
         if (keystate[SDL_SCANCODE_SLASH]) {
             playerCharacter->roll();
         }
@@ -204,12 +204,12 @@ void Engine::play() {
         if (keystate[SDL_SCANCODE_S]) {
           playerCharacter->down();
         }
-      }
 
-      draw();
-      update(ticks);
-      // if ( makeVideo ) {
-      //   frameGen.makeFrame();
-      // }
+        draw();
+        update(ticks);
+        if ( makeVideo ) {
+          frameGen.makeFrame();
+        }
+      }
     }
   }

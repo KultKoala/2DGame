@@ -5,7 +5,7 @@
 #include "drawable.h"
 #include <map>
 
-enum struct doorPlace {NONE,EAST,WEST,NORTH,SOUTH};
+enum struct doorPlace {NONE,N,S,W,E};
 
 class Room : public Drawable {
 public:

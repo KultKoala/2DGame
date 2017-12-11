@@ -17,7 +17,22 @@ Room::Room(const std::string& name) :
   doors(),
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
   worldHeight(Gamedata::getInstance().getXmlInt("world/height"))
-{setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));}
+{
+  setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
+  if(Gamedata::getInstance().getXmlInt(name+"/doorN/presence")){
+    doors[doorPlace::N]= RenderContext::getInstance()->getImage(name+"/doorN");
+  }
+  if(Gamedata::getInstance().getXmlInt(name+"/doorS/presence")){
+    doors[doorPlace::S]= RenderContext::getInstance()->getImage(name+"/doorS");
+  }
+  if(Gamedata::getInstance().getXmlInt(name+"/doorE/presence")){
+    doors[doorPlace::E]= RenderContext::getInstance()->getImage(name+"/doorE");
+  }
+  if(Gamedata::getInstance().getXmlInt(name+"/doorW/presence")){
+    doors[doorPlace::W]= RenderContext::getInstance()->getImage(name+"/doorW");
+  }
+
+}
 
 Room::Room(const Room& s) :
   Drawable(s),
@@ -45,9 +60,24 @@ void Room::draw() const {
   if(getScale() < SCALE_EPSILON) return;
   image->draw(getX(), getY(),getScale());
   border->draw(getX(),getY(),getScale());
-  for(auto door :doors){
-
+  if(doors.find(doorPlace::N)!=doors.end()){
+    doors.at(doorPlace::N)->draw(getX()+getScaledWidth()/2,getY(),getScale());
   }
+
+  if(doors.find(doorPlace::E)!=doors.end()){
+    doors.at(doorPlace::E)->draw(getX(),getY()+getScaledHeight()/2,getScale());
+  }
+
+  if(doors.find(doorPlace::W)!=doors.end()){
+    int doorWidth = doors.at(doorPlace::W)->getWidth()*getScale();
+    doors.at(doorPlace::W)->draw(getX(),getY()+getScaledHeight()/2,getScale());
+  }
+
+  if(doors.find(doorPlace::S)!=doors.end()){
+    int doorHeight = doors.at(doorPlace::S)->getHeight()*getScale();
+    doors.at(doorPlace::S)->draw(getX()+getScaledWidth()/2-doorHeight,getY()-getScaledHeight(),getScale());
+  }
+
 }
 
 void Room::update(Uint32 ticks) {

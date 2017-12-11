@@ -256,6 +256,27 @@
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
+  <doorN>
+    <presence>1</presence>
+    <file>assets/snowy_doorN.png</file>
+    <transparency>true</transparency>
+  </doorN>
+  <doorE>
+    <presence>1</presence>
+    <file>assets/snowy_doorE.png</file>
+    <transparency>true</transparency>
+  </doorE>
+  <doorW>
+    <presence>1</presence>
+    <file>assets/snowy_doorW.png</file>
+    <transparency>true</transparency>
+  </doorW>
+  <doorS>
+    <presence>1</presence>
+    <file>assets/snowy_doorS.png</file>
+    <transparency>true</transparency>
+  </doorS>
+
 </SnowyCorridor>
 
 <DarkLogCabin>
@@ -269,6 +290,26 @@
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
+  <doorN>
+    <presence>1</presence>
+    <file>assets/cabin_doorN.png</file>
+    <transparency>true</transparency>
+  </doorN>
+  <doorE>
+    <presence>1</presence>
+    <file>assets/cabin_doorE.png</file>
+    <transparency>true</transparency>
+  </doorE>
+  <doorW>
+    <presence>1</presence>
+    <file>assets/cabin_doorW.png</file>
+    <transparency>true</transparency>
+  </doorW>
+  <doorS>
+    <presence>1</presence>
+    <file>assets/cabin_doorS.png</file>
+    <transparency>true</transparency>
+  </doorS>
 </DarkLogCabin>
 
 </GameData>
