@@ -12,6 +12,7 @@
 #include "Room.h"
 #include "smartSprite.h"
 #include "multisprite.h"
+#include "sound.h"
 
 Engine::~Engine() {
   for(auto room:rooms){
@@ -37,10 +38,11 @@ Engine::Engine() :
   worldBackgrounds(),
   actors(),
   rooms(),
-  currentRoom(0),
+  currentRoom(-1),
   playerCharacter(new Player("playerCharacter")),
   hud(renderer),
   strategy(new PerPixelCollisionStrategy),
+  mid_strategy(new MidPointCollisionStrategy),
   coll(false),
   shadowcoll(false),
   makeVideo( false )
@@ -50,19 +52,24 @@ Engine::Engine() :
   worldBackgrounds.push_back(new World("ground", Gamedata::getInstance().getXmlInt("ground/factor") ));
   actors.push_back(playerCharacter);
   actors.push_back(new spiderEnemy("spiderEnemy", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
+  actors.push_back(new spiderEnemy("spiderEnemy2", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
+  actors.push_back(new spiderEnemy("spiderEnemy3", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
+  actors.push_back(new spiderEnemy("spiderEnemy4", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
   playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[1]));
+    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[2]));
+    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[3]));
+    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[4]));
   rooms.push_back(new Room("SnowyCorridor"));
   rooms.push_back(new Room("DarkLogCabin"));
-  Viewport::getInstance().setObjectToTrack(rooms[0]);
-  playerCharacter->setCurrentRoom(rooms[0]);
+  playerCharacter->setCurrentRoom(rooms,doorPlace::E,currentRoom);
+  Viewport::getInstance().setObjectToTrack(rooms[currentRoom]);
   std::cout << "Loading complete" << std::endl;
 }
 
 void Engine::draw() const {
 
-  for(auto layer: worldBackgrounds){
-    layer->draw();
-  }
+  SDL_SetRenderDrawColor(renderer,0,0,0,255);
+  SDL_RenderClear(renderer);
 
   for(auto room:rooms){
     room->draw();
@@ -72,15 +79,21 @@ void Engine::draw() const {
     actor->draw();
   }
   hud.draw();
-
   std::stringstream s;
-  s<<playerCharacter->getVelocityX()<<" "<<playerCharacter->getVelocityY();
+  std::stringstream s2;
+  s<<"Lives remaining "<<playerCharacter->getLives();
+  s2<<"Spiders Remaining: "<<spiderEnemy::spiderCount;
+  io.writeText(s.str(),0,0);
+  io.writeText(s2.str(),0,50);
+
+
   //username in lower lefthand corner
   // io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
+  checkDoors();
   checkforWeaponCollisions();
   checkForCollisions();
   checkBorderCollisions();
@@ -119,7 +132,6 @@ void Engine::checkForCollisions() {
       coll = true;
       playerCharacter->collided(true);
       playerCharacter->explode();
-      playerCharacter->reset();
     } else{
     playerCharacter->collided(false);
     }
@@ -137,6 +149,22 @@ void Engine::checkBorderCollisions(){
       }
     }
   }
+
+  void Engine::checkDoors(){
+    std::map<doorPlace, Image*> doors = rooms[currentRoom]->getDoors();
+      for ( auto door : doors ) {
+        int scaledHeight= rooms[currentRoom]->getDoorWidth(door.first);
+        int scaledWidth= rooms[currentRoom]->getDoorHeight(door.first);
+        Vector2f loc = rooms[currentRoom]->getDoorloc(door.first);
+        if (mid_strategy->executeImage(*playerCharacter, *door.second,scaledWidth,scaledHeight,loc) ) {
+
+          //@TODO temporary fix
+          playerCharacter->setCurrentRoom(rooms, door.first,currentRoom);
+          Viewport::getInstance().setObjectToTrack(rooms[currentRoom]);
+        } else {
+        }
+      }
+    }
 
 void Engine::switchSprite(){
   Viewport::getInstance().setObjectToTrack(playerCharacter);
@@ -183,6 +211,11 @@ void Engine::play() {
         }
         if (keystate[SDL_SCANCODE_PERIOD]) {
           playerCharacter->attack();
+        }
+        if (keystate[SDL_SCANCODE_G]){
+          playerCharacter->toggleGod();
+        }
+        if(keystate[SDL_SCANCODE_R]){
         }
       }
     }

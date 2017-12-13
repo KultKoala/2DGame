@@ -56,6 +56,22 @@ bool MidPointCollisionStrategy::execute(
   return distance(x1, y1, x2, y2) < COLLISION_DISTANCE;
 }
 
+bool MidPointCollisionStrategy::executeImage(
+      const Player& sprite1, const Image& image, int scaledWidth,int scaledHeight, Vector2f loc) const {
+
+  int width1 = sprite1.getScaledWidth();
+  int width2 = scaledWidth;
+  int height1 = sprite1.getScaledHeight();
+  int height2 = scaledHeight;
+
+  int COLLISION_DISTANCE = width1/2 + width2/2-50;
+  float x1 = sprite1.getX() + width1/2;
+  float y1 = sprite1.getY() + height1/2;
+  float x2 = loc[0] + width2/2;
+  float y2 = loc[1] + height2/2;
+  return distance(x1, y1, x2, y2) < COLLISION_DISTANCE;
+}
+
 
 void PerPixelCollisionStrategy::draw() const {
   IOmod::

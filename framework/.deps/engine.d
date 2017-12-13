@@ -25,7 +25,7 @@ build/engine.o: engine.cpp gamedata.h vector2f.h parseXML.h engine.h \
  spriteSheet.h clock.h world.h viewport.h drawable.h HUD.h \
  frameGenerator.h player.h smartSprite.h sprite.h helperFunctions.h \
  Room.h spiderEnemy.h explodingSprite.h chunk.h collisionStrategy.h \
- multisprite.h
+ multisprite.h sound.h
 
 gamedata.h:
 
@@ -166,3 +166,5 @@ chunk.h:
 collisionStrategy.h:
 
 multisprite.h:
+
+sound.h:

@@ -24,6 +24,8 @@ public:
   void reset();
   virtual void update(Uint32 ticks);
 
+  int getLives(){return lives;};
+
   void updateCurrentAnim(){
     if(pState == playerState::ATTACKING){
       if(mX == moveX::LEFT){
@@ -60,7 +62,7 @@ public:
   };
 
 
-  void setCurrentRoom(Room *);
+  void setCurrentRoom(std::vector<Room *>, doorPlace,int &index);
 
   playerState getState(){return pState;}
 
@@ -102,6 +104,10 @@ public:
     return (getWeaponAnim()[currentFrame]->getSurface());
   }
 
+  void toggleGod(){
+    if (godMode){godMode = false;} else {godMode = true;}
+  }
+
   //setting animations
   void right();
   void left();
@@ -141,5 +147,7 @@ protected:
 private:
   Vector2f initialVelocity;
   Vector2f previousVel;
+  bool godMode;
+  unsigned int lives;
 };
 #endif

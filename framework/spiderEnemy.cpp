@@ -8,6 +8,7 @@
 #include "helperFunctions.h"
 #include "spiderEnemy.h"
 
+int spiderEnemy::spiderCount = 10;
 
 void spiderEnemy::advanceFrame(Uint32 ticks) {
 	updateCurrentAnim();
@@ -175,6 +176,7 @@ void spiderEnemy::reset(){
 
 void spiderEnemy::explode() {
   if ( !exp ) exp = new ExplodingSprite(Sprite(getName(),getPosition(),getVelocity(),getImage()));
+	spiderCount--;
 }
 
 void spiderEnemy::stop() {

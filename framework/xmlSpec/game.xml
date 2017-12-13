@@ -16,7 +16,7 @@
   <linespace>40</linespace>
 </HUD>
 
-<title>Landon Byrd's Game</title>
+<title>Landon Byrd</title>
 <maxStringSize>50</maxStringSize>
 
 <frameCapOn>true</frameCapOn>
@@ -222,7 +222,113 @@
   </shadow>
 </spiderEnemy>
 
+<spiderEnemy2>
+  <imageWidth>64</imageWidth>
+  <imageHeight>64</imageHeight>
+  <frameInterval>100</frameInterval>
+  <chunk>
+    <size>10</size>
+    <distance>50</distance>
+  </chunk>
+  <frames>2</frames>
+  <scale>2</scale>
+  <speedX>30</speedX>
+  <speedY>30</speedY>
+  <startLoc x="350" y="500"/>
+  <safeDistance>100</safeDistance>
+  <attackAnim>
+    <file>assets/spider_jump.png</file>
+    <frames>10</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </attackAnim>
+  <idleAnim>
+    <file>assets/spider.png</file>
+    <frames>2</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </idleAnim>
+  <shadow>
+    <file>assets/spider_shadow.png</file>
+    <transparency>true</transparency>
+  </shadow>
+</spiderEnemy2>
 
+<spiderEnemy3>
+  <imageWidth>64</imageWidth>
+  <imageHeight>64</imageHeight>
+  <frameInterval>100</frameInterval>
+  <chunk>
+    <size>10</size>
+    <distance>50</distance>
+  </chunk>
+  <frames>2</frames>
+  <scale>2</scale>
+  <speedX>30</speedX>
+  <speedY>30</speedY>
+  <startLoc x="1000" y="500"/>
+  <safeDistance>100</safeDistance>
+  <attackAnim>
+    <file>assets/spider_jump.png</file>
+    <frames>10</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </attackAnim>
+  <idleAnim>
+    <file>assets/spider.png</file>
+    <frames>2</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </idleAnim>
+  <shadow>
+    <file>assets/spider_shadow.png</file>
+    <transparency>true</transparency>
+  </shadow>
+</spiderEnemy3>
+
+<spiderEnemy4>
+  <imageWidth>64</imageWidth>
+  <imageHeight>64</imageHeight>
+  <frameInterval>100</frameInterval>
+  <chunk>
+    <size>10</size>
+    <distance>50</distance>
+  </chunk>
+  <frames>2</frames>
+  <scale>2</scale>
+  <speedX>30</speedX>
+  <speedY>30</speedY>
+  <startLoc x="1100" y="200"/>
+  <safeDistance>100</safeDistance>
+  <attackAnim>
+    <file>assets/spider_jump.png</file>
+    <frames>10</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </attackAnim>
+  <idleAnim>
+    <file>assets/spider.png</file>
+    <frames>2</frames>
+    <imageWidth>64</imageWidth>
+    <imageHeight>64</imageHeight>
+    <frameInterval>100</frameInterval>
+    <transparency>true</transparency>
+  </idleAnim>
+  <shadow>
+    <file>assets/spider_shadow.png</file>
+    <transparency>true</transparency>
+  </shadow>
+</spiderEnemy4>
 
 <Giants>
   <file>assets/giants.png</file>
@@ -252,12 +358,14 @@
     <transparency>true</transparency>
   </border>
   <startLoc x="20" y="400"/>
+  <borderWidth>25</borderWidth>
+  <borderHeight>25</borderHeight>
   <scale>3</scale>
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
   <doorN>
-    <presence>1</presence>
+    <presence>0</presence>
     <file>assets/snowy_doorN.png</file>
     <transparency>true</transparency>
   </doorN>
@@ -267,12 +375,12 @@
     <transparency>true</transparency>
   </doorE>
   <doorW>
-    <presence>1</presence>
+    <presence>0</presence>
     <file>assets/snowy_doorW.png</file>
     <transparency>true</transparency>
   </doorW>
   <doorS>
-    <presence>1</presence>
+    <presence>0</presence>
     <file>assets/snowy_doorS.png</file>
     <transparency>true</transparency>
   </doorS>
@@ -285,13 +393,15 @@
     <file>assets/Dark_Log_Cabin_border.png</file>
     <transparency>true</transparency>
   </border>
-  <startLoc x="800" y="400"/>
+  <startLoc x="800" y="200"/>
+  <borderWidth>25</borderWidth>
+  <borderHeight>25</borderHeight>
   <scale>3</scale>
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
   <doorN>
-    <presence>1</presence>
+    <presence>0</presence>
     <file>assets/cabin_doorN.png</file>
     <transparency>true</transparency>
   </doorN>
@@ -306,7 +416,7 @@
     <transparency>true</transparency>
   </doorW>
   <doorS>
-    <presence>1</presence>
+    <presence>0</presence>
     <file>assets/cabin_doorS.png</file>
     <transparency>true</transparency>
   </doorS>

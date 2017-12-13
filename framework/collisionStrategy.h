@@ -6,6 +6,7 @@ class CollisionStrategy {
 public:
   virtual bool execute(const Drawable&, const Drawable&) const = 0;
   virtual bool executeBorder(const Drawable&, const Drawable&) const {return false;};
+  virtual bool executeImage(const Player&, const Image&, int ,int, Vector2f) const {return false;};
   virtual bool executeWeapon(const Player&, const Drawable&) const {return false;};
   virtual void draw() const = 0;
   virtual ~CollisionStrategy() {}
@@ -22,6 +23,7 @@ class MidPointCollisionStrategy : public CollisionStrategy {
 public:
   MidPointCollisionStrategy() {}
   virtual bool execute(const Drawable&, const Drawable&) const;
+  virtual bool executeImage(const Player&, const Image& image, int,int, Vector2f) const;
   virtual void draw() const;
   float distance(float, float, float, float) const;
 };

@@ -32,6 +32,7 @@ private:
   Player *playerCharacter;
   HUD hud;
   CollisionStrategy *strategy;
+  CollisionStrategy *mid_strategy;
   bool coll;
   bool shadowcoll;
 
@@ -47,4 +48,5 @@ private:
   void checkForCollisions();
   void checkforWeaponCollisions();
   void checkBorderCollisions();
+  void checkDoors();
 };

@@ -74,7 +74,9 @@ Player::Player( const std::string& name) :
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
 	initialVelocity(getVelocity()),
-	previousVel()
+	previousVel(),
+	godMode(false),
+	lives(3)
 {
 	//animation read in
 	animMap[playerAnim::LEFTUP] = RenderContext::getInstance()->getImages(name+"/leftUpAnim");
@@ -122,7 +124,9 @@ Player::Player(const Player& s) :
   worldWidth( s.worldWidth ),
   worldHeight( s.worldHeight ),
   initialVelocity(s.getVelocity()),
-	previousVel(s.previousVel)
+	previousVel(s.previousVel),
+	godMode(s.godMode),
+	lives(s.lives)
   { }
 
 Player& Player::operator=(const Player& s) {
@@ -145,6 +149,7 @@ Player& Player::operator=(const Player& s) {
 	observers = s.observers;
   initialVelocity = s.initialVelocity;
 	previousVel = s.previousVel;
+	lives = s.lives;
   return *this;
 }
 
@@ -164,7 +169,17 @@ void Player::draw() const {
 }
 
 void Player::explode() {
-  if ( !exp ) exp = new ExplodingSprite(Sprite(getName(),getPosition(),getVelocity(),getImage()));
+  if ( !exp && !godMode ){
+		 exp = new ExplodingSprite(Sprite(getName(),getPosition(),getVelocity(),getImage()));
+		 if(lives>0){
+			lives--;
+		 	reset();
+		} else {
+			lives =3;
+			spiderEnemy::spiderCount =10;
+
+		}
+	 }
 }
 
 void Player::reset(){
@@ -303,9 +318,30 @@ void Player::detach( spiderEnemy* o ) {
   }
 }
 
-void Player::setCurrentRoom(Room *r){
-	currentRoom = r;
-	for(auto obs: observers){
-		obs->setCurrentRoom(r);
+void Player::setCurrentRoom(std::vector<Room *> r, doorPlace p, int &index){
+	Vector2f offset;
+	doorPlace op;
+
+	//set player position to opposite door in room to be transferred
+	if(p ==doorPlace::N){
+		op =doorPlace::S;
+		offset = Vector2f(0,-200);
+	} else if(p==doorPlace::S){
+		op=doorPlace::N;
+		offset = Vector2f(0,200);
+	} else if(p==doorPlace::W){
+		op=doorPlace::E;
+		offset= Vector2f(-200,0);
+		index--;
+	} else if(p==doorPlace::E){
+		op=doorPlace::W;
+		offset = Vector2f(200,0);
+		index++;
 	}
+	std::cout<<index<<std::endl;
+	currentRoom = r[index];
+	Vector2f newPos = r[index]->getDoorloc(op)+offset;
+	setPosition(newPos);
 }
+
+void checkDoors();

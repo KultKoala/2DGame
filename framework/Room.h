@@ -31,15 +31,23 @@ public:
   int getScaledWidth()  const { return getScale()*image->getWidth();  }
   int getScaledHeight() const { return getScale()*image->getHeight(); }
 
+  const std::map<doorPlace,Image*> getDoors();
+  int getDoorWidth(doorPlace)const;
+  int getDoorHeight (doorPlace)const;
+  Vector2f getDoorloc(doorPlace)const;
+
 private:
   const Image * image;
   const Image * border;
   std::map<doorPlace, Image*> doors;
 
 
+
 protected:
   int worldWidth;
   int worldHeight;
+  int borderWidth;
+  int borderHeight;
 
   int getDistance(const Room*) const;
   Vector2f makeVelocity(int, int) const;
