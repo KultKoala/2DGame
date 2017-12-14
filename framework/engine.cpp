@@ -55,12 +55,16 @@ Engine::Engine() :
   actors.push_back(new spiderEnemy("spiderEnemy2", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
   actors.push_back(new spiderEnemy("spiderEnemy3", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
   actors.push_back(new spiderEnemy("spiderEnemy4", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
-  playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[1]));
-    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[2]));
-    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[3]));
-    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[4]));
   rooms.push_back(new Room("SnowyCorridor"));
   rooms.push_back(new Room("DarkLogCabin"));
+  playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[1]));
+  static_cast<spiderEnemy*>(actors[1])->setCurrentRoom(rooms[0]);
+    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[2]));
+    static_cast<spiderEnemy*>(actors[2])->setCurrentRoom(rooms[0]);
+    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[3]));
+    static_cast<spiderEnemy*>(actors[3])->setCurrentRoom(rooms[1]);
+    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[4]));
+    static_cast<spiderEnemy*>(actors[4])->setCurrentRoom(rooms[1]);
   playerCharacter->setCurrentRoom(rooms,doorPlace::E,currentRoom);
   Viewport::getInstance().setObjectToTrack(rooms[currentRoom]);
   std::cout << "Loading complete" << std::endl;
@@ -93,10 +97,10 @@ void Engine::draw() const {
 }
 
 void Engine::update(Uint32 ticks) {
-  checkDoors();
   checkforWeaponCollisions();
   checkForCollisions();
   checkBorderCollisions();
+  checkDoors();
   for(auto world:worldBackgrounds){
     world->update();
   }
@@ -132,6 +136,8 @@ void Engine::checkForCollisions() {
       coll = true;
       playerCharacter->collided(true);
       playerCharacter->explode();
+      currentRoom =0;
+      Viewport::getInstance().setObjectToTrack(rooms[0]);
     } else{
     playerCharacter->collided(false);
     }

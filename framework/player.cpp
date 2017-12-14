@@ -173,10 +173,12 @@ void Player::explode() {
 		 exp = new ExplodingSprite(Sprite(getName(),getPosition(),getVelocity(),getImage()));
 		 if(lives>0){
 			lives--;
-		 	reset();
+			reset();
+			// 	reset();
 		} else {
 			lives =3;
 			spiderEnemy::spiderCount =10;
+			reset();
 
 		}
 	 }
@@ -325,17 +327,17 @@ void Player::setCurrentRoom(std::vector<Room *> r, doorPlace p, int &index){
 	//set player position to opposite door in room to be transferred
 	if(p ==doorPlace::N){
 		op =doorPlace::S;
-		offset = Vector2f(0,-200);
+		offset = Vector2f(0,-60);
 	} else if(p==doorPlace::S){
 		op=doorPlace::N;
-		offset = Vector2f(0,200);
+		offset = Vector2f(0,60);
 	} else if(p==doorPlace::W){
 		op=doorPlace::E;
-		offset= Vector2f(-200,0);
+		offset= Vector2f(-60,0);
 		index--;
 	} else if(p==doorPlace::E){
 		op=doorPlace::W;
-		offset = Vector2f(200,0);
+		offset = Vector2f(60,0);
 		index++;
 	}
 	std::cout<<index<<std::endl;
