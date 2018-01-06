@@ -20,8 +20,9 @@ build/Room.o: Room.cpp Room.h drawable.h /usr/include/SDL2/SDL.h \
  /usr/include/SDL2/SDL_messagebox.h /usr/include/SDL2/SDL_power.h \
  /usr/include/SDL2/SDL_render.h /usr/include/SDL2/SDL_system.h \
  /usr/include/SDL2/SDL_timer.h /usr/include/SDL2/SDL_version.h vector2f.h \
- image.h gamedata.h parseXML.h renderContext.h imageFactory.h \
- spriteSheet.h
+ image.h spiderEnemy.h smartSprite.h sprite.h player.h helperFunctions.h \
+ explodingSprite.h chunk.h gamedata.h parseXML.h collisionStrategy.h \
+ renderContext.h imageFactory.h spriteSheet.h
 
 Room.h:
 
@@ -117,9 +118,25 @@ vector2f.h:
 
 image.h:
 
+spiderEnemy.h:
+
+smartSprite.h:
+
+sprite.h:
+
+player.h:
+
+helperFunctions.h:
+
+explodingSprite.h:
+
+chunk.h:
+
 gamedata.h:
 
 parseXML.h:
+
+collisionStrategy.h:
 
 renderContext.h:
 

@@ -22,7 +22,7 @@ build/spiderEnemy.o: spiderEnemy.cpp gamedata.h vector2f.h parseXML.h \
  /usr/include/SDL2/SDL_system.h /usr/include/SDL2/SDL_timer.h \
  /usr/include/SDL2/SDL_version.h imageFactory.h image.h spriteSheet.h \
  helperFunctions.h spiderEnemy.h drawable.h smartSprite.h sprite.h \
- player.h Room.h explodingSprite.h chunk.h
+ player.h Room.h collisionStrategy.h explodingSprite.h chunk.h
 
 gamedata.h:
 
@@ -137,6 +137,8 @@ sprite.h:
 player.h:
 
 Room.h:
+
+collisionStrategy.h:
 
 explodingSprite.h:
 

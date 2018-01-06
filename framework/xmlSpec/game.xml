@@ -1,5 +1,32 @@
 <?xml version = "1.0"?>
 <GameData>
+<title>Landon Byrd</title>
+<maxStringSize>50</maxStringSize>
+
+<frameCapOn>true</frameCapOn>
+<period>17</period>
+
+<maxFrames>300</maxFrames>
+<username>landonb</username>
+
+<view>
+  <width>2000</width>
+  <height>1000</height>
+</view>
+
+<world>
+  <width>2000</width>
+  <height>1000</height>
+</world>
+
+<font name="font">
+  <file>fonts/Pixel.ttf</file>
+  <size>24</size>
+  <red>255</red>
+  <green>255</green>
+  <blue>255</blue>
+  <alpha>255</alpha>
+</font>
 
 <HUD>
   <red>0</red>
@@ -15,57 +42,6 @@
   <line4>F1 to toggle HUD</line4>
   <linespace>40</linespace>
 </HUD>
-
-<title>Landon Byrd</title>
-<maxStringSize>50</maxStringSize>
-
-<frameCapOn>true</frameCapOn>
-<period>17</period>
-
-<maxFrames>300</maxFrames>
-<username>landonb</username>
-
-<view>
-  <width>1200</width>
-  <height>600</height>
-</view>
-
-<world>
-  <width>2000</width>
-  <height>1000</height>
-</world>
-
-<sky>
-  <file>assets/white.png</file>
-  <factor>3</factor>
-  <transparency>false</transparency>
-</sky>
-
-<mountains>
-  <file>assets/mountains.png</file>
-  <factor>2</factor>
-  <transparency>true</transparency>
-</mountains>
-
-
-
-<ground>
-  <file>assets/ground.png</file>
-  <factor>1</factor>
-  <transparency>true</transparency>
-</ground>
-
-
-
-<font name="font">
-  <file>fonts/Pixel.ttf</file>
-  <size>24</size>
-  <red>255</red>
-  <green>255</green>
-  <blue>255</blue>
-  <alpha>255</alpha>
-
-</font>
 
 <playerCharacter>
   <frames>6</frames>
@@ -144,7 +120,7 @@
     <frames>6</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>75</frameInterval>
     <transparency>true</transparency>
   </rightDownAnim>
 
@@ -153,7 +129,7 @@
     <frames>5</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>50</frameInterval>
+    <frameInterval>75</frameInterval>
     <transparency>true</transparency>
   </attackLeftAnim>
 
@@ -162,7 +138,7 @@
     <frames>5</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>50</frameInterval>
+    <frameInterval>100</frameInterval>
     <transparency>true</transparency>
   </attackRightAnim>
 
@@ -189,7 +165,6 @@
 <spiderEnemy>
   <imageWidth>64</imageWidth>
   <imageHeight>64</imageHeight>
-  <frameInterval>100</frameInterval>
   <chunk>
     <size>10</size>
     <distance>50</distance>
@@ -213,7 +188,7 @@
     <frames>2</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>250</frameInterval>
     <transparency>true</transparency>
   </idleAnim>
   <shadow>
@@ -241,7 +216,7 @@
     <frames>10</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>250</frameInterval>
     <transparency>true</transparency>
   </attackAnim>
   <idleAnim>
@@ -249,7 +224,7 @@
     <frames>2</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>250</frameInterval>
     <transparency>true</transparency>
   </idleAnim>
   <shadow>
@@ -285,7 +260,7 @@
     <frames>2</frames>
     <imageWidth>64</imageWidth>
     <imageHeight>64</imageHeight>
-    <frameInterval>100</frameInterval>
+    <frameInterval>250</frameInterval>
     <transparency>true</transparency>
   </idleAnim>
   <shadow>
@@ -330,27 +305,6 @@
   </shadow>
 </spiderEnemy4>
 
-<Giants>
-  <file>assets/giants.png</file>
-  <startLoc x="150" y="200"/>
-  <frames>4</frames>
-  <imageWidth>250</imageWidth>
-  <imageHeight>400</imageHeight>
-  <frameInterval>300</frameInterval>
-  <speedX>0</speedX>
-  <speedY>0</speedY>
-  <transparency>true</transparency>
-</Giants>
-
-<face>
-  <file>assets/face.png</file>
-  <startLoc x="0" y="100"/>
-  <speedX>100</speedX>
-  <speedY>100</speedY>
-  <transparency>true</transparency>
-  <safeDistance>300</safeDistance>
-</face>
-
 <SnowyCorridor>
   <file>assets/Snowy_Corridor.png</file>
   <border>
@@ -364,27 +318,18 @@
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
-  <doorN>
-    <presence>0</presence>
-    <file>assets/snowy_doorN.png</file>
-    <transparency>true</transparency>
-  </doorN>
   <doorE>
-    <presence>1</presence>
     <file>assets/snowy_doorE.png</file>
     <transparency>true</transparency>
   </doorE>
-  <doorW>
-    <presence>0</presence>
-    <file>assets/snowy_doorW.png</file>
-    <transparency>true</transparency>
-  </doorW>
-  <doorS>
-    <presence>0</presence>
-    <file>assets/snowy_doorS.png</file>
-    <transparency>true</transparency>
-  </doorS>
-
+  <enemy1>
+    <type>spiderEnemy</type>
+      <startLoc x="400" y="600"/>
+  </enemy1>
+  <enemy2>
+    <type>spiderEnemy</type>
+      <startLoc x="350" y="500"/>
+  </enemy2>
 </SnowyCorridor>
 
 <DarkLogCabin>
@@ -400,26 +345,22 @@
   <speedX>0</speedX>
   <speedY>0</speedY>
   <transparency>true</transparency>
-  <doorN>
-    <presence>0</presence>
-    <file>assets/cabin_doorN.png</file>
-    <transparency>true</transparency>
-  </doorN>
   <doorE>
-    <presence>1</presence>
     <file>assets/cabin_doorE.png</file>
     <transparency>true</transparency>
   </doorE>
   <doorW>
-    <presence>1</presence>
     <file>assets/cabin_doorW.png</file>
     <transparency>true</transparency>
   </doorW>
-  <doorS>
-    <presence>0</presence>
-    <file>assets/cabin_doorS.png</file>
-    <transparency>true</transparency>
-  </doorS>
+  <enemy1>
+    <type>spiderEnemy</type>
+    <startLoc x="1000" y="500"/>
+  </enemy1>
+  <enemy2>
+    <type>spiderEnemy</type>
+    <startLoc x="1100" y="200"/>
+  </enemy2>
 </DarkLogCabin>
 
 </GameData>

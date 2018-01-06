@@ -24,64 +24,24 @@ void spiderEnemy::advanceFrame(Uint32 ticks) {
 	}
 }
 
-// spiderEnemy::spiderEnemy( const std::string& name) :
-//   Drawable(name,
-//            Vector2f(Gamedata::getInstance().getXmlInt(name+"/startLoc/x"),
-//                     Gamedata::getInstance().getXmlInt(name+"/startLoc/y")),
-//            Vector2f(Gamedata::getInstance().getXmlInt(name+"/speedX"),
-//                     Gamedata::getInstance().getXmlInt(name+"/speedY"))
-//            ),
-// 	animMap(),
-//   animInterval(),
-// 	shadow(RenderContext::getInstance()->getImage(name+"/shadow")),
-//   mX(moveX::RIGHT),
-// 	mY(moveY::DOWN),
-// 	pState(playerState::NONE),
-// 	currentAnim(playerAnim::RIGHTDOWN),
-//   currentFrame(0),
-//   numberOfFrames( Gamedata::getInstance().getXmlInt(name+"/frames") ),
-//   frameInterval( Gamedata::getInstance().getXmlInt(name+"/frameInterval")),
-//   timeSinceLastFrame( 0 ),
-//   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
-//   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
-// 	initialVelocity(getVelocity()),
-// 	previousVel(),
-//   safeDistance(Gamedata::getInstance().getXmlFloat(name+"/safeDistance"))
-// {
-// 	//animation read in
-// 	animMap[playerAnim::LEFTUP] = RenderContext::getInstance()->getImages(name+"/idleAnim");
-// 	animMap[playerAnim::RIGHTUP] = RenderContext::getInstance()->getImages(name+"/idleAnim");
-// 	animMap[playerAnim::RIGHTDOWN] = RenderContext::getInstance()->getImages(name+"/idleAnim");
-// 	animMap[playerAnim::LEFTDOWN] = RenderContext::getInstance()->getImages(name+"/idleAnim");
-// 	animMap[playerAnim::ATTACKLEFT] = RenderContext::getInstance()->getImages(name+"/attackAnim");
-// 	animMap[playerAnim::ATTACKRIGHT] = RenderContext::getInstance()->getImages(name+"/attackAnim");
-//
-// 	//anim interval size read in
-// 	animInterval[playerAnim::LEFTUP] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
-// 	animInterval[playerAnim::RIGHTUP] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
-// 	animInterval[playerAnim::RIGHTDOWN] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
-// 	animInterval[playerAnim::LEFTDOWN] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
-// 	animInterval[playerAnim::ATTACKLEFT] = Gamedata::getInstance().getXmlInt(name+"/attackAnim/frameInterval");
-// 	animInterval[playerAnim::ATTACKRIGHT] = Gamedata::getInstance().getXmlInt(name+"/attackAnim/frameInterval");
-//
-// 	setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
-//  }
+//pass in name with form "SnowyCorridor/enemy1"
+//pos i
 
- spiderEnemy::spiderEnemy( const std::string& name, const Vector2f& pos, int w, int h) :
+ spiderEnemy::spiderEnemy( const std::string& name) :
+
    Drawable(name,
             Vector2f(Gamedata::getInstance().getXmlInt(name+"/startLoc/x"),
                      Gamedata::getInstance().getXmlInt(name+"/startLoc/y")),
-            Vector2f(Gamedata::getInstance().getXmlInt(name+"/speedX"),
-                     Gamedata::getInstance().getXmlInt(name+"/speedY"))
+            Vector2f(Gamedata::getInstance().getXmlInt("spiderEnemy/speedX"),
+                     Gamedata::getInstance().getXmlInt("spiderEnemy/speedY"))
             ),
 	exp(nullptr),
-  playerPos(pos),
-  playerWidth(w),
-  playerHeight(h),
+  playerWidth(),
+  playerHeight(),
 	currentRoom(),
  	animMap(),
   animInterval(),
- 	shadow(RenderContext::getInstance()->getImage(name+"/shadow")),
+ 	shadow(RenderContext::getInstance()->getImage("spiderEnemy/shadow")),
   mX(moveX::RIGHT),
  	mY(moveY::DOWN),
  	pState(playerState::MOVING),
@@ -92,25 +52,25 @@ void spiderEnemy::advanceFrame(Uint32 ticks) {
    worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
  	initialVelocity(getVelocity()),
  	previousVel(),
-   safeDistance(Gamedata::getInstance().getXmlFloat(name+"/safeDistance"))
+   safeDistance(Gamedata::getInstance().getXmlFloat("spiderEnemy/safeDistance"))
  {
  	//animation read in
- 	animMap[playerAnim::LEFTUP] = RenderContext::getInstance()->getImages(name+"/idleAnim");
- 	animMap[playerAnim::RIGHTUP] = RenderContext::getInstance()->getImages(name+"/idleAnim");
- 	animMap[playerAnim::RIGHTDOWN] = RenderContext::getInstance()->getImages(name+"/idleAnim");
- 	animMap[playerAnim::LEFTDOWN] = RenderContext::getInstance()->getImages(name+"/idleAnim");
- 	animMap[playerAnim::ATTACKLEFT] = RenderContext::getInstance()->getImages(name+"/attackAnim");
- 	animMap[playerAnim::ATTACKRIGHT] = RenderContext::getInstance()->getImages(name+"/attackAnim");
+ 	animMap[playerAnim::LEFTUP] = RenderContext::getInstance()->getImages("spiderEnemy/idleAnim");
+ 	animMap[playerAnim::RIGHTUP] = RenderContext::getInstance()->getImages("spiderEnemy/idleAnim");
+ 	animMap[playerAnim::RIGHTDOWN] = RenderContext::getInstance()->getImages("spiderEnemy/idleAnim");
+ 	animMap[playerAnim::LEFTDOWN] = RenderContext::getInstance()->getImages("spiderEnemy/idleAnim");
+ 	animMap[playerAnim::ATTACKLEFT] = RenderContext::getInstance()->getImages("spiderEnemy/attackAnim");
+ 	animMap[playerAnim::ATTACKRIGHT] = RenderContext::getInstance()->getImages("spiderEnemy/attackAnim");
 
  	//anim interval size read in
- 	animInterval[playerAnim::LEFTUP] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
- 	animInterval[playerAnim::RIGHTUP] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
- 	animInterval[playerAnim::RIGHTDOWN] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
- 	animInterval[playerAnim::LEFTDOWN] = Gamedata::getInstance().getXmlInt(name+"/idleAnim/frameInterval");
- 	animInterval[playerAnim::ATTACKLEFT] = Gamedata::getInstance().getXmlInt(name+"/attackAnim/frameInterval");
- 	animInterval[playerAnim::ATTACKRIGHT] = Gamedata::getInstance().getXmlInt(name+"/attackAnim/frameInterval");
+ 	animInterval[playerAnim::LEFTUP] = Gamedata::getInstance().getXmlInt("spiderEnemy/idleAnim/frameInterval");
+ 	animInterval[playerAnim::RIGHTUP] = Gamedata::getInstance().getXmlInt("spiderEnemy/idleAnim/frameInterval");
+ 	animInterval[playerAnim::RIGHTDOWN] = Gamedata::getInstance().getXmlInt("spiderEnemy/idleAnim/frameInterval");
+ 	animInterval[playerAnim::LEFTDOWN] = Gamedata::getInstance().getXmlInt("spiderEnemy/idleAnim/frameInterval");
+ 	animInterval[playerAnim::ATTACKLEFT] = Gamedata::getInstance().getXmlInt("spiderEnemy/attackAnim/frameInterval");
+ 	animInterval[playerAnim::ATTACKRIGHT] = Gamedata::getInstance().getXmlInt("spiderEnemy/attackAnim/frameInterval");
 
- 	setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
+ 	setScale(Gamedata::getInstance().getXmlInt("spiderEnemy/scale"));
 	safeDistance = safeDistance*getScale();
 	stop();
   }

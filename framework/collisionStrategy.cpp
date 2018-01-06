@@ -121,8 +121,7 @@ SDL_Surface* scaleSurface(const SDL_Surface* const surf, int width, int height) 
 
 bool PerPixelCollisionStrategy::execute(
       const Drawable& obj1, const Drawable& obj2) const {
-  RectangularCollisionStrategy strategy;
-  if ( not strategy.execute(obj1, obj2) ) return false;
+  if ( not RectangularCollisionStrategy::instance().execute(obj1, obj2) ) return false;
   // If we got this far, we know that the sprite rectangles intersect!
 
   Vector2f p1 = obj1.getPosition() - Viewport::getInstance().getPosition();
@@ -201,8 +200,7 @@ bool PerPixelCollisionStrategy::execute(
 
 bool PerPixelCollisionStrategy::executeWeapon(
       const Player& obj1, const Drawable& obj2) const{
-  RectangularCollisionStrategy strategy;
-  if ( not strategy.execute(obj1, obj2) ) return false;
+  if ( not RectangularCollisionStrategy::instance().execute(obj1, obj2) ) return false;
   // If we got this far, we know that the sprite rectangles intersect!
 
   Vector2f p1 = obj1.getPosition() - Viewport::getInstance().getPosition();
@@ -280,8 +278,7 @@ bool PerPixelCollisionStrategy::executeWeapon(
 
 bool PerPixelCollisionStrategy::executeBorder(
       const Drawable& obj1, const Drawable& obj2) const {
-  RectangularCollisionStrategy strategy;
-  if ( not strategy.execute(obj1, obj2) ) return false;
+  if ( not RectangularCollisionStrategy::instance().execute(obj1, obj2) ) return false;
   // If we got this far, we know that the sprite rectangles intersect!
 
   Vector2f p1 = obj1.getPosition() - Viewport::getInstance().getPosition();

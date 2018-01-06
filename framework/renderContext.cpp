@@ -37,7 +37,7 @@ SDL_Window* RenderContext::initWindow( ) {
   }
 
   // TODO set fullscreen
-  // SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
   return window;
 }
 

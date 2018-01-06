@@ -68,7 +68,6 @@ Player::Player( const std::string& name) :
 	pState(playerState::NONE),
 	currentAnim(playerAnim::RIGHTDOWN),
   currentFrame(0),
-  numberOfFrames( Gamedata::getInstance().getXmlInt(name+"/frames") ),
   frameInterval( Gamedata::getInstance().getXmlInt(name+"/frameInterval")),
   timeSinceLastFrame( 0 ),
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
@@ -118,7 +117,6 @@ Player::Player(const Player& s) :
 	pState(s.pState),
 	currentAnim(s.currentAnim),
   currentFrame(s.currentFrame),
-  numberOfFrames( s.numberOfFrames ),
   frameInterval( s.frameInterval ),
   timeSinceLastFrame( s.timeSinceLastFrame ),
   worldWidth( s.worldWidth ),
@@ -141,7 +139,6 @@ Player& Player::operator=(const Player& s) {
 	mY = s.mY;
 	pState = s.pState;
   currentFrame = (s.currentFrame);
-  numberOfFrames = ( s.numberOfFrames );
   frameInterval = ( s.frameInterval );
   timeSinceLastFrame = ( s.timeSinceLastFrame );
   worldWidth = ( s.worldWidth );
@@ -208,7 +205,7 @@ void Player::right() {
   }
 }
 void Player::left()  {
-  if ( getX() > 0 && pState != playerState::ROLLING) {
+  if ( getX() > 0 && pState != playerState::ROLLING ) {
     setVelocityX(-initialVelocity[0]);
     mX = moveX::LEFT;
 		if(pState == playerState::STOPPED){
@@ -340,10 +337,16 @@ void Player::setCurrentRoom(std::vector<Room *> r, doorPlace p, int &index){
 		offset = Vector2f(60,0);
 		index++;
 	}
-	std::cout<<index<<std::endl;
 	currentRoom = r[index];
+	//set position somewhat offset from door
 	Vector2f newPos = r[index]->getDoorloc(op)+offset;
 	setPosition(newPos);
+
+	for(auto enemy:r[index]->getEnemies()){
+		attach(enemy);
+	}
+
+
 }
 
 void checkDoors();

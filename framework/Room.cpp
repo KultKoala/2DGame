@@ -15,25 +15,39 @@ Room::Room(const std::string& name) :
   image( RenderContext::getInstance()->getImage(name) ),
   border( RenderContext::getInstance()->getImage(name+"/border") ),
   doors(),
+  enemies(),
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
   borderWidth(Gamedata::getInstance().getXmlInt(name+"/borderWidth")),
   borderHeight(Gamedata::getInstance().getXmlInt(name+"/borderHeight"))
 {
   setScale(Gamedata::getInstance().getXmlInt(name+"/scale"));
-  if(Gamedata::getInstance().getXmlInt(name+"/doorN/presence")){
+  if(Gamedata::getInstance().checkTag(name+"/doorN/transparency")){
     doors[doorPlace::N]= RenderContext::getInstance()->getImage(name+"/doorN");
   }
-  if(Gamedata::getInstance().getXmlInt(name+"/doorS/presence")){
+  if(Gamedata::getInstance().checkTag(name+"/doorS/transparency")){
     doors[doorPlace::S]= RenderContext::getInstance()->getImage(name+"/doorS");
   }
-  if(Gamedata::getInstance().getXmlInt(name+"/doorE/presence")){
+  if(Gamedata::getInstance().checkTag(name+"/doorE/transparency")){
     doors[doorPlace::E]= RenderContext::getInstance()->getImage(name+"/doorE");
   }
-  if(Gamedata::getInstance().getXmlInt(name+"/doorW/presence")){
+  if(Gamedata::getInstance().checkTag(name+"/doorW/transparency")){
     doors[doorPlace::W]= RenderContext::getInstance()->getImage(name+"/doorW");
   }
 
+  unsigned int enemyNum = 1;
+
+  while(Gamedata::getInstance().checkTag(name+"/enemy"+std::to_string(enemyNum)+"/type")){
+    std::string type = Gamedata::getInstance().getXmlStr(name+"/enemy"+std::to_string(enemyNum)+"/type");
+    if(type == "spiderEnemy"){
+      Gamedata::getInstance().getXmlInt(name+"/enemy"+std::to_string(enemyNum)+"/type");
+      enemies.push_back(new spiderEnemy(name+"/enemy"+std::to_string(enemyNum)));
+    } else {
+      std::cout<<"Invalid Enemy Type in xml"<<std::endl;
+      exit(1);
+    }
+    enemyNum++;
+  }
 
 }
 
@@ -42,6 +56,7 @@ Room::Room(const Room& s) :
   image(s.image),
   border(s.border),
   doors(s.doors),
+  enemies(s.enemies),
   worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
   borderWidth(s.borderWidth),
@@ -63,8 +78,12 @@ inline namespace{
 
 void Room::draw() const {
   if(getScale() < SCALE_EPSILON) return;
+  //draw base image of room
   image->draw(getX(), getY(),getScale());
+  //draw border to be used in collisions
   border->draw(getX(),getY(),getScale());
+
+  //check for and draw each door present @TODO refactor to optimize
   if(doors.find(doorPlace::N)!=doors.end()){
     int x = getX() -doors.at(doorPlace::N)->getWidth()*getScale()/2+getScaledWidth()/2;
     int y = getY() +borderHeight*getScale() -  doors.at(doorPlace::N)->getHeight()*getScale()+2*getScale();
@@ -87,6 +106,12 @@ void Room::draw() const {
     int x = getX() -doors.at(doorPlace::S)->getWidth()*getScale()/2+getScaledWidth()/2;
     int y = getY() + getScaledHeight()- borderHeight*getScale()-4*getScale();
     doors.at(doorPlace::S)->draw(x,y,getScale());
+  }
+
+  //draw all enemies
+  //@TODO sort enemies by y pos
+  for(auto enemy:enemies){
+    enemy->draw();
   }
 
 }
@@ -120,10 +145,75 @@ Vector2f Room::getDoorloc(doorPlace p) const{
 
   if(p==doorPlace::W){
     loc[0] = getX();
-    loc[1] = getY()+getScaledHeight()/2-doors.at(doorPlace::E)->getHeight()*getScale()/2;;
+    loc[1] = getY()+getScaledHeight()/2-doors.at(doorPlace::W)->getHeight()*getScale()/2;
   }
   return loc;
 }
 
+std::vector<spiderEnemy*> Room::getEnemies(){
+  return enemies;
+}
+
+void Room::checkforWeaponCollisions(){
+//check for hits with other actors
+  if(playerCharacter->getAnimIndex()!= playerAnim::ATTACKLEFT && playerCharacter->getAnimIndex()!=playerAnim::ATTACKRIGHT) return;
+  for ( Drawable* d : enemies ) {
+    if (PerPixelCollisionStrategy::instance().executeWeapon(*playerCharacter, *d) ) {
+      d->collided(true);
+      static_cast<spiderEnemy*>(d)->explode();
+      static_cast<spiderEnemy*>(d)->reset();
+    } else{
+      d->collided(false);
+    }
+  }
+}
+
+void Room::checkForCollisions() {
+  for ( Drawable* d : enemies ) {
+    //don't check for collision on player if attacking
+    if(playerCharacter->getAnimIndex()== playerAnim::ATTACKLEFT && playerCharacter->getAnimIndex()==playerAnim::ATTACKRIGHT) return;
+
+    if (playerCharacter !=d && PerPixelCollisionStrategy::instance().execute(*playerCharacter, *d) ) {
+      playerCharacter->collided(true);
+      playerCharacter->explode();
+      //@TODO reset room tracker
+    } else{
+    playerCharacter->collided(false);
+    }
+  }
+}
+
+void Room::checkBorderCollisions(){
+  //check for shadow collisions
+    for ( Drawable* d : enemies ) {
+      if (PerPixelCollisionStrategy::instance().executeBorder(*this, *d) ) {
+        d->shadowCollided(true);
+      } else {
+        d->shadowCollided(false);
+      }
+    }
+  }
+
+  void Room::checkDoors(){
+      for ( auto door : doors ) {
+        int scaledHeight= getDoorWidth(door.first);
+        int scaledWidth= getDoorHeight(door.first);
+        Vector2f loc = getDoorloc(door.first);
+        if (MidPointCollisionStrategy::instance().executeImage(*playerCharacter, *door.second,scaledWidth,scaledHeight,loc) ) {
+          //@TODO set logic to move player to another room
+        } else {
+        }
+      }
+    }
+
 void Room::update(Uint32 ticks) {
+  for(auto enemy : enemies){
+    enemy->update(ticks);
+  }
+}
+
+Room::~Room(){
+  for(auto enemy:enemies){
+    delete enemy;
+  }
 }

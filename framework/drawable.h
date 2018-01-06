@@ -11,12 +11,11 @@
 class Drawable {
 public:
   Drawable(const std::string& n, const Vector2f& pos, const Vector2f& vel):
-    name(n), position(pos), velocity(vel), scale(1.0),shadowCollision(false),
-    collision(false) {}
+    name(n), position(pos), velocity(vel), scale(1.0)
+    {}
 
   Drawable(const Drawable& s) :
     name(s.name), position(s.position), velocity(s.velocity), scale(s.scale),
-    shadowCollision(s.shadowCollision), collision(s.collision)
     { }
 
   virtual ~Drawable() {}
@@ -51,19 +50,12 @@ public:
   void  setVelocityX(float vx) { velocity[0] = vx;   }
   float getVelocityY() const   { return velocity[1]; }
   void  setVelocityY(float vy) { velocity[1] = vy;   }
-  void shadowCollided(bool coll) {shadowCollision=coll;}
-  bool getShadowCollided() const{return shadowCollision;}
-  void collided(bool coll) { collision = coll; }
-  bool getCollided ()const {return collision;}
-
 
 private:
   std::string name;
   Vector2f position;
   Vector2f velocity;
   float scale;
-  bool shadowCollision;
-  bool collision;
 };
 
 #endif

@@ -19,14 +19,11 @@ Engine::~Engine() {
     delete room;
   }
 
-  for(auto actor : actors) {
-    delete actor;
-  }
+  delete playerCharacter;
 
   for(auto background:worldBackgrounds){
     delete background;
   }
-  delete strategy;
 }
 
 Engine::Engine() :
@@ -36,37 +33,16 @@ Engine::Engine() :
   renderer( rc->getRenderer() ),
   viewport( Viewport::getInstance() ),
   worldBackgrounds(),
-  actors(),
   rooms(),
-  currentRoom(-1),
+  currentRoom(1),
   playerCharacter(new Player("playerCharacter")),
   hud(renderer),
-  strategy(new PerPixelCollisionStrategy),
-  mid_strategy(new MidPointCollisionStrategy),
-  coll(false),
-  shadowcoll(false),
   makeVideo( false )
 {
-  worldBackgrounds.push_back(new World("sky", Gamedata::getInstance().getXmlInt("sky/factor") ));
-  worldBackgrounds.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor") ));
-  worldBackgrounds.push_back(new World("ground", Gamedata::getInstance().getXmlInt("ground/factor") ));
-  actors.push_back(playerCharacter);
-  actors.push_back(new spiderEnemy("spiderEnemy", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
-  actors.push_back(new spiderEnemy("spiderEnemy2", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
-  actors.push_back(new spiderEnemy("spiderEnemy3", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
-  actors.push_back(new spiderEnemy("spiderEnemy4", playerCharacter->getPosition(),playerCharacter->getScaledWidth(),playerCharacter->getScaledHeight()));
   rooms.push_back(new Room("SnowyCorridor"));
   rooms.push_back(new Room("DarkLogCabin"));
-  playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[1]));
-  static_cast<spiderEnemy*>(actors[1])->setCurrentRoom(rooms[0]);
-    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[2]));
-    static_cast<spiderEnemy*>(actors[2])->setCurrentRoom(rooms[0]);
-    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[3]));
-    static_cast<spiderEnemy*>(actors[3])->setCurrentRoom(rooms[1]);
-    playerCharacter->attach(dynamic_cast<spiderEnemy*>(actors[4]));
-    static_cast<spiderEnemy*>(actors[4])->setCurrentRoom(rooms[1]);
-  playerCharacter->setCurrentRoom(rooms,doorPlace::E,currentRoom);
-  Viewport::getInstance().setObjectToTrack(rooms[currentRoom]);
+  playerCharacter->setCurrentRoom(rooms,doorPlace::W,currentRoom);
+  Viewport::getInstance().setObjectToTrack(rooms[0]);
   std::cout << "Loading complete" << std::endl;
 }
 
@@ -78,99 +54,24 @@ void Engine::draw() const {
   for(auto room:rooms){
     room->draw();
   }
+  playerCharacter->draw();
 
-  for(auto actor : actors) {
-    actor->draw();
-  }
   hud.draw();
-  std::stringstream s;
-  std::stringstream s2;
-  s<<"Lives remaining "<<playerCharacter->getLives();
-  s2<<"Spiders Remaining: "<<spiderEnemy::spiderCount;
-  io.writeText(s.str(),0,0);
-  io.writeText(s2.str(),0,50);
-
-
-  //username in lower lefthand corner
-  // io.writeText("Landon Byrd", 5, Gamedata::getInstance().getXmlInt("view/height")-25);
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
-  checkforWeaponCollisions();
-  checkForCollisions();
-  checkBorderCollisions();
-  checkDoors();
+  for(auto room:rooms){
+    room->update(ticks);
+  }
   for(auto world:worldBackgrounds){
     world->update();
   }
-  for(auto actor: actors){
-    actor->update(ticks);
-  }
+
+  playerCharacter->update(ticks);
 
   viewport.update(); // always update viewport last
 }
-
-void Engine::checkforWeaponCollisions(){
-  shadowcoll = false;
-//check for hits with other actors
-  if(playerCharacter->getAnimIndex()!= playerAnim::ATTACKLEFT && playerCharacter->getAnimIndex()!=playerAnim::ATTACKRIGHT) return;
-  for ( Drawable* d : actors ) {
-    if (playerCharacter !=d && strategy->executeWeapon(*playerCharacter, *d) ) {
-      d->collided(true);
-      shadowcoll=true;
-      static_cast<spiderEnemy*>(d)->explode();
-      static_cast<spiderEnemy*>(d)->reset();
-    } else{
-      d->collided(false);
-    }
-  }
-}
-
-void Engine::checkForCollisions() {
-  coll = false;
-//check for hits with other actors
-  for ( Drawable* d : actors ) {
-    if(playerCharacter->getAnimIndex()== playerAnim::ATTACKLEFT && playerCharacter->getAnimIndex()==playerAnim::ATTACKRIGHT) return;
-    if (playerCharacter !=d && strategy->execute(*playerCharacter, *d) ) {
-      coll = true;
-      playerCharacter->collided(true);
-      playerCharacter->explode();
-      currentRoom =0;
-      Viewport::getInstance().setObjectToTrack(rooms[0]);
-    } else{
-    playerCharacter->collided(false);
-    }
-  }
-}
-
-void Engine::checkBorderCollisions(){
-  //check for shadow collisions
-    for ( Drawable* d : actors ) {
-      if (strategy->executeBorder(*rooms[currentRoom], *d) ) {
-        d->shadowCollided(true);
-
-      } else {
-        d->shadowCollided(false);
-      }
-    }
-  }
-
-  void Engine::checkDoors(){
-    std::map<doorPlace, Image*> doors = rooms[currentRoom]->getDoors();
-      for ( auto door : doors ) {
-        int scaledHeight= rooms[currentRoom]->getDoorWidth(door.first);
-        int scaledWidth= rooms[currentRoom]->getDoorHeight(door.first);
-        Vector2f loc = rooms[currentRoom]->getDoorloc(door.first);
-        if (mid_strategy->executeImage(*playerCharacter, *door.second,scaledWidth,scaledHeight,loc) ) {
-
-          //@TODO temporary fix
-          playerCharacter->setCurrentRoom(rooms, door.first,currentRoom);
-          Viewport::getInstance().setObjectToTrack(rooms[currentRoom]);
-        } else {
-        }
-      }
-    }
 
 void Engine::switchSprite(){
   Viewport::getInstance().setObjectToTrack(playerCharacter);

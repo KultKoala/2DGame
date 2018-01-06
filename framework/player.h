@@ -13,6 +13,7 @@
 #include "explodingSprite.h"
 
 class spiderEnemy;
+class Room;
 
 class Player : public Drawable {
 public:
@@ -135,9 +136,8 @@ protected:
   playerState pState;
   playerAnim currentAnim;
 
-  unsigned currentFrame;
-  unsigned numberOfFrames;
-  unsigned frameInterval;
+  unsigned int currentFrame;
+  unsigned int frameInterval;
   float timeSinceLastFrame;
   int worldWidth;
   int worldHeight;

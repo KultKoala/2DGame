@@ -12,12 +12,14 @@
 #include "helperFunctions.h"
 #include "explodingSprite.h"
 
+class Room;
+
 class spiderEnemy : public Drawable {
 public:
   static int spiderCount;
   // spiderEnemy(const std::string&);
   spiderEnemy(const spiderEnemy&);
-  spiderEnemy(const std::string&, const Vector2f& pos, int w, int h);
+  spiderEnemy(const std::string&);
 
 
   virtual void draw() const;

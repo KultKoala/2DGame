@@ -17,6 +17,8 @@ enum struct playerState{
   NONE,MOVING,ATTACKING,ROLLING,STOPPED
 };
 
+enum struct doorPlace {NONE,N,S,W,E};
+
 enum struct moveY{NONE,UP,DOWN};
 enum struct moveX{NONE,LEFT,RIGHT};
 

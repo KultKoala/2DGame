@@ -26,16 +26,10 @@ private:
   SDL_Renderer * const renderer;
   Viewport& viewport;
   std::vector<World*> worldBackgrounds;
-  std::vector<Drawable*> actors;
   std::vector<Room*> rooms;
   int currentRoom;
   Player *playerCharacter;
   HUD hud;
-  CollisionStrategy *strategy;
-  CollisionStrategy *mid_strategy;
-  bool coll;
-  bool shadowcoll;
-
 
   bool makeVideo;
 
@@ -45,8 +39,4 @@ private:
   Engine(const Engine&) = delete;
   Engine& operator=(const Engine&) = delete;
   void printScales() const;
-  void checkForCollisions();
-  void checkforWeaponCollisions();
-  void checkBorderCollisions();
-  void checkDoors();
 };
