@@ -48,14 +48,16 @@ Engine::Engine() :
 
 void Engine::draw() const {
 
+  //set background color
   SDL_SetRenderDrawColor(renderer,0,0,0,255);
   SDL_RenderClear(renderer);
 
+  //draw rooms
   for(auto room:rooms){
     room->draw();
   }
-  playerCharacter->draw();
 
+  playerCharacter->draw();
   hud.draw();
   SDL_RenderPresent(renderer);
 }
